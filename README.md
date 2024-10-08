@@ -85,8 +85,8 @@ MAIL_ENCRYPTION=<переменная_типа_шифрования>null
 MAIL_FROM_ADDRESS=<переменная_адреса_отправителя>"hello@example.com"
 MAIL_FROMNAME=<переменная_имени_отправителя>"${APPNAME}"
 
-AWS_ACCESS_KEY_ID=<переменная_идентификатора_ключа_доступаAWS> n\
-AWS_SECRET_ACCESS_KEY=<переменная_секретного_ключа_доступаAWS> /n
+AWS_ACCESS_KEY_ID=<переменная_идентификатора_ключа_доступаAWS>
+AWS_SECRET_ACCESS_KEY=<переменная_секретного_ключа_доступаAWS>
 AWS_DEFAULT_REGION=<переменная_региона_AWS_по_умолчанию>us-east-1
 AWS_BUCKET=<переменнаяименикорзиныAWSS3>
 AWS_USE_PATH_STYLE_ENDPOINT=<>false
