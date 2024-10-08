@@ -9,6 +9,12 @@ class Theme extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'description',
+        'logo',
+    ];
+
     public function comments() {
         return $this->hasMany(Comment::class);
     }

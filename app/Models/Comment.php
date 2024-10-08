@@ -9,6 +9,13 @@ class Comment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'content',
+        'status',
+        'theme_id',
+        'user_id'
+    ];
+
     public function answers() {
         return $this->hasMany(Answer::class);
     }
