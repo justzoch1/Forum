@@ -3,23 +3,26 @@
 ### 1. Клонирование репозитория
    
    ``` git clone https://github.com/justzoch1/Forum.git ```
-   
 
-### 2. Запуск Docker контейнеров
+### 2. Установка composer
+
+   ``` php composer install ```
+
+### 3. Запуск Docker контейнеров
    
    ``` docker compose up -d ```
    
 
-#### 3. Вход в контейнер приложения
+#### 4. Вход в контейнер приложения
    
    ``` docker compose exec -it app bash ```
    
 
-#### 4. Добавление ключа приложения
+#### 5. Добавление ключа приложения
    
    ``` php artisan key:generate ```
    
-#### 5. Запуск миграций
+#### 6. Запуск миграций
    
    ``` php artisan migrate ```
    
