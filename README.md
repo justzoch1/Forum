@@ -2,22 +2,22 @@
 
 ### 1. Клонирование репозитория
    
-   git clone https://github.com/justzoch1/Forum.git
+   ``` git clone https://github.com/justzoch1/Forum.git ```
    
 
 ### 2. Запуск Docker контейнеров
    
-   docker compose up -d
+   ``` docker compose up -d ```
    
 
 #### 3. Вход в контейнер приложения
    
-   docker compose exec -it app bash
+   ``` docker compose exec -it app bash ```
    
 
 #### 4. Запуск миграций
    
-   php artisan migrate
+   ``` php artisan migrate ```
    
 
 ## Запуск сервера:
