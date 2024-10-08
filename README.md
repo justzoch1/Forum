@@ -27,6 +27,8 @@
 
 ## Файл .env:
 
+На текущий момент изменению подверглись только переменные подключения к базе данных.
+
 APP_NAME=<переменная_названия_приложения>Laravel
 
 APP_ENV=<переменная_состояния_приложения>local
@@ -43,13 +45,13 @@ APP_LOCALE=<переменная_локали_приложения>en
 
 APP_FALLBACK_LOCALE=<переменная_резервной_локали>en
 
-APP_FAKER_LOCALE=<переменная_локалидляфиктивных_данных>enUS
+APP_FAKER_LOCALE=<переменная_локали_для_фиктивных_данных>enUS
 
-APP_FAKER_LOCALE=<переменная_локалидляфиктивных_данных>enUS
+APP_FAKER_LOCALE=<переменная_локали_для_фиктивных_данных>enUS
 
 APPMAINTENANCEDRIVER=<переменная_драйвера_режима_обслуживания>file
 
-# APPMAINTENANCESTORE=database
+APPMAINTENANCESTORE=database
 
 BCRYPTROUNDS=<переменная_количества_раундов_хеширования>12
 
