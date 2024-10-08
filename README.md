@@ -15,7 +15,11 @@
    ``` docker compose exec -it app bash ```
    
 
-#### 4. Запуск миграций
+#### 4. Добавление ключа приложения
+   
+   ``` php artisan key:generate ```
+   
+#### 5. Запуск миграций
    
    ``` php artisan migrate ```
    
@@ -73,17 +77,17 @@ SESSION_PATH=<переменная_пути_к_файлу_cookie_сеанса>/
 
 SESSION_DOMAIN=<переменная_домена_для_файлов_cookie_сеанса>null
 
-BROADCASTCONNECTION=<переменная_соединения_для_вещания_событий>log
+BROADCAST_CONNECTION=<переменная_соединения_для_вещания_событий>log
 
-FILESYSTEMDISK=<переменная_дискафайловой_системы>local
+FILE_SYSTEM_DISK=<переменная_дискафайловой_системы>local
 
-QUEUECONNECTION=<переменная_соединения_очереди>database
+QUEUE_CONNECTION=<переменная_соединения_очереди>database
 
-CACHESTORE=<переменная_драйвера_кэша>database
+CACHE_STORE=<переменная_драйвера_кэша>database
 
-CACHEPREFIX=<переменная_префикса_ключа_кэша>
+CACHE_PREFIX=<переменная_префикса_ключа_кэша>
 
-MEMCACHEDHOST=<переменная_хоста>127.0.0.1
+MEMCACHED_HOST=<переменная_хоста>127.0.0.1
 
 DB_CONNECTION=<переменная_подключения>pgsql
 
