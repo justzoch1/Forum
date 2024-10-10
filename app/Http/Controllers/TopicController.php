@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\TopicRepository;
+use App\Services\TopicControllerService;
 
 class TopicController extends Controller
 {
-    public function getList(TopicRepository $repository): array
+    public function getList(TopicControllerService $repository): array
     {
         $topics = $repository->getList();
 

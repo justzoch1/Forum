@@ -20,73 +20,85 @@ class CommentController extends Controller
     */
 
     /*
-    *  Получение списка всех комментариев
+    *  Отфильтровать комментариии по темам
     */
-    public function getList(CommentRepository $repository): array
+    public function getListOfTopic(Theme $topic, CommentControllerService $service): array
     {
-        return $repository->getList();
+        $comments = $service->getListOfTopic($topic);
 
         abort_unless($comments, 500);
 
         return [
-            'status' => 'succes',
+            'status' => 'success',
             'items' => $comments
         ];
     }
 
     /*
-    *  Фильтрация комментариев по темам
+    * Оставить комментарий
     */
-    public function getListOfTopic(Theme $topic, CommentRepository $repository): array
+    public function left(CommentSendRequest $request, CommentControllerService $service): array
     {
-        $comments = $repository->getListOfTopic($topic);
-
-        abort_unless($comments, 500);
-
-        return [
-            'status' => 'succes',
-            'items' => $comments
-        ];
-    }
-
-    /*
-    * Отправка нового сообщения
-    */
-    public function create(CommentSendRequest $request, CommentControllerService $service): array
-    {
-        $comment = $service->create($request->all());
+        $comment = $service->create($request->validated());
 
         abort_unless($comment, 404);
 
         return [
-            'status' => 'succes',
+            'status' => 'success',
             'item' => $comment
         ];
     }
 
     /*
-    * Удаление сообщения
+    * Редактировать сообщение
+    */
+    public function update(Comment $comment, CommentUpdateRequest $request, CommentControllerService $service): array
+    {
+        $comment = $service->update($comment, $request->all());
+
+        return [
+            'status' => 'success',
+            'item' => $comment
+        ];
+    }
+
+    /*
+    * Удаление сообщение
     */
     public function delete(Comment $comment, CommentControllerService $service): array
     {
         $comment = $service->delete($comment);
 
         return [
-            'status' => 'succes',
+            'status' => 'success',
         ];
     }
 
     /*
-    * Редактирование сообщения
+    * Искать по ключевым словами и фразам контента
     */
-    public function update(Comment $comment, CommentUpdateRequest $request, CommentControllerService $service): array
-    {
-        Log::info($request->all);
-        $comment = $service->update($comment, $request->all());
+    public function search(Theme $topic, Request $request, CommentControllerService $service) {
+        $comments = $service->search($topic, $request->q);
+
+        abort_if(count($comments) < 1, 404);
 
         return [
-            'status' => 'succes',
-            'item' => $comment
+            'status' => 'success',
+            'item' => $comments
+        ];
+    }
+
+    /*
+    * Сортировать по популярности и дате загрузки
+    */
+    public function sort(Theme $topic, string $by, CommentControllerService $service) {
+        $comments = $service->sort($topic, $by);
+
+        abort_if(count($comments) < 1, 404);
+
+        return [
+            'status' => 'success',
+            'item' => $comments
         ];
     }
 }

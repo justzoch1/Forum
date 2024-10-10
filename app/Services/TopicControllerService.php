@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Repositories;
-use App\Repositories\Interfaces\TopicRepositoryInterface;
-use App\Models\Theme;
+namespace App\Services;
 
-class TopicRepository implements TopicRepositoryInterface
+use App\Models\Comment;
+use App\Models\Theme;
+use Illuminate\Support\Facades\Log;
+
+class TopicControllerService
 {
     public function getList(): array
     {

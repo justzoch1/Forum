@@ -22,7 +22,9 @@ class CommentFactory extends Factory
             'content' => $this->faker->paragraph(),
             'status' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
             'last_updated' => $this->faker->dateTime(),
-            'theme_id' => Theme::factory(),
+            'theme_id' => function () {
+                return Theme::all()->random();
+            },
             'user_id' => User::factory(),
             'created_at' => now(),
             'updated_at' => now(),

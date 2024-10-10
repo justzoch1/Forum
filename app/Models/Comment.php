@@ -27,4 +27,11 @@ class Comment extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeWithAnswers($query)
+    {
+        $query->with(['answers' => function ($query) {
+            $query->with(['comment', 'user']);
+        }]);
+    }
 }
