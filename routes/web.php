@@ -8,4 +8,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/topic', [TopicController::class, 'getList'])->middleware(ApiOrViewResponse::class);
+Route::get('/topics', [TopicController::class, 'getList'])->middleware(ApiOrViewResponse::class);

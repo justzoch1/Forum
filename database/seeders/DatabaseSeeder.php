@@ -21,6 +21,5 @@ class DatabaseSeeder extends Seeder
         Comment::factory(100)->create();
         Theme::factory(100)->create();
         Answer::factory(100)->create();
-
     }
 }
