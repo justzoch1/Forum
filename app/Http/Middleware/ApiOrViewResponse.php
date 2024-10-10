@@ -4,12 +4,17 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
-use Symfony\Component\HttpFoundation\Response;
+use App\Services\ViewNameService;
 
 class ApiOrViewResponse
 {
+    private $viewNameService;
+
+    public function __construct(ViewNameService $viewNameService)
+    {
+        $this->viewNameService = $viewNameService;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -24,18 +29,8 @@ class ApiOrViewResponse
             return response()->json($response->getData());
         } else {
             // Запрос для веб-интерфейса
-            $viewName = $this->getViewNameFromController();
+            $viewName = $this->viewNameService->getViewNameFromController();
             return response()->view($viewName, (array) $response->getData());
         }
-    }
-
-    private function getViewNameFromController()
-    {
-        $currentAction = Route::currentRouteAction();
-        list($controller, $method) = explode('@', $currentAction);
-        $controller = preg_replace('/.*\\\/', '', $controller);
-
-        $viewName = str_replace('Controller', '', $controller);
-        return strtolower($viewName);
     }
 }

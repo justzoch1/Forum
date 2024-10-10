@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Repositories\TopicRepository;
+use App\Repositories\TopicRepository;
 
 class TopicController extends Controller
 {
-    public function getList(TopicRepository $repository)
+    public function getList(TopicRepository $repository): array
     {
         $topics = $repository->getList();
 
@@ -15,7 +14,7 @@ class TopicController extends Controller
             abort(404, 'Ошибка: топики не были найдены');
         }
 
-        return ['topics' => $topics];
+        return ['items' => $topics];
     }
 }
 
