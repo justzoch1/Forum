@@ -12,6 +12,7 @@ class CommentControllerService
     {
         $comments = Comment::where('theme_id', $topic->id)
             ->withAnswers()
+            ->withThemeAndUser()
             ->get();
 
         return [
@@ -23,12 +24,13 @@ class CommentControllerService
     public function search(Theme $topic, $q) {
         $comments = Comment::where('theme_id', $topic->id)
             ->where('content', 'like', '%' . $q . '%')
-            ->withAnswers()
+            ->withThemeAndUser()
+            ->onlyApproved()
             ->get();
 
         return [
             'count' => count($comments),
-            'items' => $comments
+            'comments' => $comments
         ];
     }
 
@@ -37,16 +39,19 @@ class CommentControllerService
             ? Comment::where('theme_id', $topic->id)
                 ->withCount('answers')
                 ->withAnswers()
+                ->withThemeAndUser()
+                ->onlyApproved()
                 ->orderBy('answers_count', 'desc')
                 ->get()
             : Comment::where('theme_id', $topic->id)
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', 'asc')
+                ->onlyApproved()
                 ->withAnswers()
                 ->get();
 
         return [
             'count' => count($comments),
-            'items' => $comments
+            'comments' => $comments
         ];
     }
 
@@ -62,7 +67,7 @@ class CommentControllerService
         return $comment;
     }
 
-    public function delete(Comment $comment)
+    public function delete(Comment $comment): void
     {
         $comment->delete();
     }

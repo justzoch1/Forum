@@ -4,17 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Services\ViewNameService;
 
-class ApiOrViewResponse
+class ApiOrViewPostRespond
 {
-    private $viewNameService;
-
-    public function __construct(ViewNameService $viewNameService)
-    {
-        $this->viewNameService = $viewNameService;
-    }
-
     /**
      * Handle an incoming request.
      *
@@ -28,9 +20,7 @@ class ApiOrViewResponse
             // Запрос для API
             return response()->json($response->getData());
         } else {
-            // Запрос для веб-интерфейса
-            $viewName = $this->viewNameService->getViewNameFromController();
-            return response()->view($viewName, (array) $response->getData());
+            return redirect()->back()->with('success', 'Комментарий создан успешно!');
         }
     }
 }

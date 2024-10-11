@@ -41,11 +41,11 @@ class CommentController extends Controller
     {
         $comment = $service->create($request->validated());
 
-        abort_unless($comment, 404);
+        abort_unless($comment, 500);
 
         return [
             'status' => 'success',
-            'item' => $comment
+            'items' => $comment
         ];
     }
 
@@ -58,7 +58,7 @@ class CommentController extends Controller
 
         return [
             'status' => 'success',
-            'item' => $comment
+            'items' => $comment
         ];
     }
 
@@ -84,7 +84,7 @@ class CommentController extends Controller
 
         return [
             'status' => 'success',
-            'item' => $comments
+            'items' => $comments
         ];
     }
 
@@ -98,7 +98,7 @@ class CommentController extends Controller
 
         return [
             'status' => 'success',
-            'item' => $comments
+            'items' => $comments
         ];
     }
 }
