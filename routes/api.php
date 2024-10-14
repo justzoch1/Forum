@@ -1,15 +1,15 @@
 <?php
 
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\TopicController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TopicController;
 use App\Http\Middleware\ApiOrViewGetRespond;
 use App\Http\Middleware\ApiOrViewPostRespond;
-use App\Http\Middleware\ApiOrViewResponse;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
 Route::prefix('/topics')->middleware(ApiOrViewGetRespond::class)->group(function () {
     Route::get('/', [TopicController::class, 'getList'])->name('topics.list');

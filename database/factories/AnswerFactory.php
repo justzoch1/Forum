@@ -20,7 +20,9 @@ class AnswerFactory extends Factory
     {
 
         return [
-            'comment_id' => Comment::factory(),
+            'comment_id' => function () {
+                return Comment::all()->random();
+            },
             'user_id' => User::factory(),
             'created_at' => now(),
             'updated_at' => now(),
