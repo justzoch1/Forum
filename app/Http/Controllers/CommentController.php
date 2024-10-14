@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
+
     /*
     *  Отфильтровать комментариии по темам
     */
@@ -34,13 +35,13 @@ class CommentController extends Controller
     */
     public function left(Theme $topic, CommentSendRequest $request, CommentControllerService $service): array
     {
-        $comment = $service->create($request->validated(), $topic);
+        $comment = $service->createFromRequest($request->validated(), $topic);
 
         abort_unless($comment, 500);
 
         return [
             'status' => 'success',
-            'items' => $comment
+            'comment' => $comment,
         ];
     }
 
@@ -49,11 +50,11 @@ class CommentController extends Controller
     */
     public function update(Comment $comment, CommentUpdateRequest $request, CommentControllerService $service): array
     {
-        $comment = $service->update($comment, $request->all());
+        $comment = $service->updateFromRequest($comment, $request->validated());
 
         return [
             'status' => 'success',
-            'items' => $comment
+            'comment' => $comment
         ];
     }
 
@@ -62,7 +63,7 @@ class CommentController extends Controller
     */
     public function delete(Comment $comment, CommentControllerService $service): array
     {
-        $comment = $service->delete($comment);
+        $service->delete($comment);
 
         return [
             'status' => 'success',
@@ -79,21 +80,23 @@ class CommentController extends Controller
 
         return [
             'status' => 'success',
-            'items' => $comments
+            'items' => $comments,
+            'topic' => $topic
         ];
     }
 
     /*
     * Сортировать по популярности и дате загрузки
     */
-    public function sort(Theme $topic, string $by, CommentControllerService $service) {
-        $comments = $service->sort($topic, $by);
+    public function sort(Theme $topic, Request $request, CommentControllerService $service) {
+        $comments = $service->sort($topic, $request->by);
 
         abort_if(count($comments) < 1, 404);
 
         return [
             'status' => 'success',
-            'items' => $comments
+            'items' => $comments,
+            'topic' => $topic
         ];
     }
 }

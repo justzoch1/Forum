@@ -47,4 +47,9 @@ class Comment extends Model
     public function scopeOnlyApproved($query) {
         $query->where('status', 'approved');
     }
+
+    public function scopeSortByAnswerCount($query) {
+        $query->withCount('answers')
+            ->orderBy('answers_count', 'desc');
+    }
 }
