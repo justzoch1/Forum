@@ -14,12 +14,6 @@ use Illuminate\Support\Facades\Log;
 class CommentController extends Controller
 {
     /*
-    # Поиск по комментариям.
-    # Cортировка коментариев;
-    # Возможность листать комментарии до бесконечности;
-    */
-
-    /*
     *  Отфильтровать комментариии по темам
     */
     public function getListOfTopic(Theme $topic, CommentControllerService $service): array
@@ -30,16 +24,17 @@ class CommentController extends Controller
 
         return [
             'status' => 'success',
-            'items' => $comments
+            'items' => $comments,
+            'topic' => $topic
         ];
     }
 
     /*
     * Оставить комментарий
     */
-    public function left(CommentSendRequest $request, CommentControllerService $service): array
+    public function left(Theme $topic, CommentSendRequest $request, CommentControllerService $service): array
     {
-        $comment = $service->create($request->validated());
+        $comment = $service->create($request->validated(), $topic);
 
         abort_unless($comment, 500);
 

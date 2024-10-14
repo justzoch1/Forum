@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('content')
 
-<form action="{{ route('comments.left') }}" method="POST">
+<form action="{{ route('comments.left', $topic->id) }}" method="POST">
     @csrf
     @method('POST')
     <div class="form-group">
@@ -9,14 +9,18 @@
         <textarea name="content" id="content" rows="3" class="form-control" required></textarea>
     </div>
     <div class="form-group">
-        <label for="theme_id">Айди темы</label>
-        <input name="theme_id" id="theme_id" class="form-control" required>
-    </div>
-    <div class="form-group">
         <label for="user_id">Айди пользователя</label>
         <input name="user_id" id="user_id" class="form-control" required>
     </div>
     <button type="submit" class="btn btn-primary">Оставить комментарий</button>
+</form>
+
+<form action="{{ route('topics.comments.search', $topic->id) }}" method="GET">
+    <div class="form-group">
+        <label for="content">Поиск</label>
+        <input name="q" id="search" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Искать</button>
 </form>
 
 <div>

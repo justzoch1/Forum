@@ -21,7 +21,7 @@ Route::prefix('/topics')->middleware(ApiOrViewGetRespond::class)->group(function
 });
 
 Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(function () {
-    Route::post('/', [CommentController::class, 'left'])->name('comments.left');
+    Route::post('/{topic}', [CommentController::class, 'left'])->name('comments.left');
     Route::delete('/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
     Route::put('/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::patch('/{comment}', [CommentController::class, 'update'])->name('comments.update');

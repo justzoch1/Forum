@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Comment;
 use App\Models\Theme;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Validator;
 
 class CommentControllerService
 {
@@ -55,8 +56,15 @@ class CommentControllerService
         ];
     }
 
-    public function create(array $data): Comment
+    public function create(array $data, Theme $topic): Comment
     {
+        $theme = Theme::find($topic->id);
+
+        if (!$theme) {
+            throw new \Exception("Тема с таким а id $topic->id не найдена");
+        }
+
+        $data = array_merge($data, ['theme_id' => $topic->id]);
         $comment = Comment::create($data);
         return $comment;
     }
