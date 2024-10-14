@@ -36,6 +36,7 @@ class CommentController extends Controller
     public function left(Theme $topic, CommentSendRequest $request, CommentControllerService $service): array
     {
         $comment = $service->createFromRequest($request->validated(), $topic);
+        Log::info($comment);
 
         abort_unless($comment, 500);
 

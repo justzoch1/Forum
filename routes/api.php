@@ -12,7 +12,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::prefix('/forum')->group(function () {
+Route::prefix('/forum')->middleware(ApiOrViewGetRespond::class)->group(function () {
     Route::get('/', [TopicController::class, 'getList'])->name('topics.list');
     Route::prefix('/{topic}/comments')->group(function () {
         Route::get('/', [CommentController::class, 'getListOfTopic'])->name('comments.list');
