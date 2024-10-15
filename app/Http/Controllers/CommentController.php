@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
-    /*
-    # Поиск по комментариям.
-    # Cортировка коментариев;
-    # Возможность листать комментарии до бесконечности;
-    */
 
     /*
     *  Отфильтровать комментариии по темам
@@ -30,22 +25,24 @@ class CommentController extends Controller
 
         return [
             'status' => 'success',
-            'items' => $comments
+            'items' => $comments,
+            'topic' => $topic
         ];
     }
 
     /*
     * Оставить комментарий
     */
-    public function left(CommentSendRequest $request, CommentControllerService $service): array
+    public function left(Theme $topic, CommentSendRequest $request, CommentControllerService $service): array
     {
-        $comment = $service->create($request->validated());
+        $comment = $service->createFromRequest($request->validated(), $topic);
+        Log::info($comment);
 
         abort_unless($comment, 500);
 
         return [
             'status' => 'success',
-            'items' => $comment
+            'comment' => $comment,
         ];
     }
 
@@ -54,11 +51,11 @@ class CommentController extends Controller
     */
     public function update(Comment $comment, CommentUpdateRequest $request, CommentControllerService $service): array
     {
-        $comment = $service->update($comment, $request->all());
+        $comment = $service->updateFromRequest($comment, $request->validated());
 
         return [
             'status' => 'success',
-            'items' => $comment
+            'comment' => $comment
         ];
     }
 
@@ -67,7 +64,7 @@ class CommentController extends Controller
     */
     public function delete(Comment $comment, CommentControllerService $service): array
     {
-        $comment = $service->delete($comment);
+        $service->delete($comment);
 
         return [
             'status' => 'success',
@@ -77,28 +74,32 @@ class CommentController extends Controller
     /*
     * Искать по ключевым словами и фразам контента
     */
-    public function search(Theme $topic, Request $request, CommentControllerService $service) {
+    public function search(Theme $topic, Request $request, CommentControllerService $service): array
+    {
         $comments = $service->search($topic, $request->q);
 
         abort_if(count($comments) < 1, 404);
 
         return [
             'status' => 'success',
-            'items' => $comments
+            'items' => $comments,
+            'topic' => $topic
         ];
     }
 
     /*
     * Сортировать по популярности и дате загрузки
     */
-    public function sort(Theme $topic, string $by, CommentControllerService $service) {
-        $comments = $service->sort($topic, $by);
+    public function sort(Theme $topic, Request $request, CommentControllerService $service): array
+    {
+        $comments = $service->sort($topic, $request->by);
 
         abort_if(count($comments) < 1, 404);
 
         return [
             'status' => 'success',
-            'items' => $comments
+            'items' => $comments,
+            'topic' => $topic
         ];
     }
 }

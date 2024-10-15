@@ -23,4 +23,9 @@ class Message extends Model
     public function receiver() {
         return $this->belongsTo(User::class, 'receiver_id');
     }
+
+    public function scopeWithSenderAndReceiver($query) {
+        $query->join('users as sender', 'sender.id', '=', 'messages.sender_id')
+            ->select('messages.*', 'sender.name as sender_name');
+    }
 }
