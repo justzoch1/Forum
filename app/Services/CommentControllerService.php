@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Comment;
 use App\Models\Theme;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Validator;
 
 class CommentControllerService
 {
@@ -12,6 +13,7 @@ class CommentControllerService
     {
         $comments = Comment::where('theme_id', $topic->id)
             ->withAnswers()
+            ->onlyApproved()
             ->withThemeAndUser()
             ->get();
 
@@ -21,9 +23,10 @@ class CommentControllerService
         ];
     }
 
-    public function search(Theme $topic, $q) {
+    public function search(Theme $topic, string $q): array {
         $comments = Comment::where('theme_id', $topic->id)
             ->where('content', 'like', '%' . $q . '%')
+            ->withAnswers()
             ->withThemeAndUser()
             ->onlyApproved()
             ->get();
@@ -34,19 +37,19 @@ class CommentControllerService
         ];
     }
 
-    public function sort(Theme $topic, $by) {
+    public function sort(Theme $topic, string $by): array {
         $comments = $by == 'popular'
             ? Comment::where('theme_id', $topic->id)
-                ->withCount('answers')
+                ->onlyApproved()
                 ->withAnswers()
                 ->withThemeAndUser()
-                ->onlyApproved()
-                ->orderBy('answers_count', 'desc')
+                ->SortByAnswerCount()
                 ->get()
             : Comment::where('theme_id', $topic->id)
                 ->orderBy('created_at', 'asc')
                 ->onlyApproved()
                 ->withAnswers()
+                ->withThemeAndUser()
                 ->get();
 
         return [
@@ -55,13 +58,21 @@ class CommentControllerService
         ];
     }
 
-    public function create(array $data): Comment
+    public function createFromRequest(array $data, Theme $topic): Comment
     {
-        $comment = Comment::create($data);
+        $theme = Theme::find($topic->id);
+
+        if (!$theme) {
+            throw new \Exception("Тема с таким id $topic->id не найдена");
+        }
+
+        $comment = Comment::create(array_merge($data, [
+            'theme_id' => $topic->id
+        ]));
         return $comment;
     }
 
-    public function update(Comment $comment, array $data): Comment
+    public function updateFromRequest(Comment $comment, array $data): Comment
     {
         $comment->update($data);
         return $comment;

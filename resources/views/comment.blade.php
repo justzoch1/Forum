@@ -1,16 +1,12 @@
 @extends('layouts.main')
 @section('content')
 
-<form action="{{ route('comments.left') }}" method="POST">
+<form action="{{ route('comments.left', $topic->id) }}" method="POST">
     @csrf
     @method('POST')
     <div class="form-group">
         <label for="content">Контент</label>
         <textarea name="content" id="content" rows="3" class="form-control" required></textarea>
-    </div>
-    <div class="form-group">
-        <label for="theme_id">Айди темы</label>
-        <input name="theme_id" id="theme_id" class="form-control" required>
     </div>
     <div class="form-group">
         <label for="user_id">Айди пользователя</label>
@@ -19,6 +15,27 @@
     <button type="submit" class="btn btn-primary">Оставить комментарий</button>
 </form>
 
+<form action="{{ route('topics.comments.search', $topic->id) }}" method="GET">
+    @csrf
+    @method('GET')
+    <div class="form-group">
+        <label for="content">Поиск</label>
+        <input name="q" id="search" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Искать</button>
+</form>
+<form action="{{ route('topics.comments.sort', $topic->id) }}" method="GET">
+    @csrf
+    @method('GET')
+    <div class="form-group">
+        <label for="sort_by">Сортировать по:</label>
+        <select name="by" id="sort_by" class="form-control">
+            <option value="popular">Популярности</option>
+            <option value="new">Дате загрузки</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Сортировать</button>
+</form>
 <div>
     @foreach($items->comments as $comment)
         <h3>Имя пользователя: {{ $comment->user_name }} Email: {{ $comment->user_email }} Тема: {{$comment->theme_name}}</h4>
