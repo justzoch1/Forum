@@ -36,6 +36,9 @@
     </div>
     <button type="submit" class="btn btn-primary">Сортировать</button>
 </form>
+@if (count($items->comments) < 1)
+    <p>Здесь пока ничего нет</p>
+@endif
 <div>
     @foreach($items->comments as $comment)
         <h3>Имя пользователя: {{ $comment->user_name }} Email: {{ $comment->user_email }} Тема: {{$comment->theme_name}}</h4>

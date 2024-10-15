@@ -13,10 +13,9 @@ class MessengerController
     /*
     *  Получить список комментариев между мельзователями
     */
-    public function getListOfUsers(User $sender, User $receiver, MessengerControllerService $service): array
+    public function getListOfUsers(User $sender, User $receiver, MessengerControllerService $service)
     {
         $message = $service->getListOfUser($sender, $receiver);
-
         return [
             'count' => count($message),
             'items' => $message
@@ -28,11 +27,7 @@ class MessengerController
     */
     public function send(User $sender, User $receiver, MessageSendRequest $request, MessengerControllerService $service): array
     {
-
         $message = $service->createFromRequest($sender, $receiver, $request->validated());
-
-        abort_unless($message, 404);
-
         return [
             'status' => 'success',
             'message' => $message,
@@ -45,7 +40,6 @@ class MessengerController
     public function update(Message $message, MessageUpdateRequest $request, MessengerControllerService $service): array
     {
         $message = $service->updateFromRequest($message, $request->validated());
-        abort_unless($message, 500);
         return [
             'status' => 'success',
             'message' => $message
@@ -58,7 +52,6 @@ class MessengerController
     public function delete(Message $message, MessengerControllerService $service): array
     {
         $service->delete($message);
-        abort_unless($message, 500);
         return [
             'status' => 'success',
         ];
