@@ -74,7 +74,8 @@ class CommentController extends Controller
     /*
     * Искать по ключевым словами и фразам контента
     */
-    public function search(Theme $topic, Request $request, CommentControllerService $service) {
+    public function search(Theme $topic, Request $request, CommentControllerService $service): array
+    {
         $comments = $service->search($topic, $request->q);
 
         abort_if(count($comments) < 1, 404);
@@ -89,7 +90,8 @@ class CommentController extends Controller
     /*
     * Сортировать по популярности и дате загрузки
     */
-    public function sort(Theme $topic, Request $request, CommentControllerService $service) {
+    public function sort(Theme $topic, Request $request, CommentControllerService $service): array
+    {
         $comments = $service->sort($topic, $request->by);
 
         abort_if(count($comments) < 1, 404);

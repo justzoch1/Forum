@@ -21,8 +21,6 @@ class MessageSendRequest extends FormRequest
      */
     public function rules(): array
     {
-//            'sender_id' => 'required|integer|exists:users,id',
-//            'receiver_id' => 'required|integer|exists:users,id',
         return [
             'content' => 'required|string',
         ];

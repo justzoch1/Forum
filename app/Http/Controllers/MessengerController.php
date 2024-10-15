@@ -10,6 +10,9 @@ use App\Services\MessengerControllerService;
 
 class MessengerController
 {
+    /*
+    *  Получить список комментариев между мельзователями
+    */
     public function getListOfUsers(User $sender, User $receiver, MessengerControllerService $service): array
     {
         $message = $service->getListOfUser($sender, $receiver);
@@ -20,6 +23,9 @@ class MessengerController
         ];
     }
 
+    /*
+    *  Отправить сообщение пользователю
+    */
     public function send(User $sender, User $receiver, MessageSendRequest $request, MessengerControllerService $service): array
     {
 
@@ -33,6 +39,9 @@ class MessengerController
         ];
     }
 
+    /*
+    *  Отредактировать сообщение
+    */
     public function update(Message $message, MessageUpdateRequest $request, MessengerControllerService $service): array
     {
         $message = $service->updateFromRequest($message, $request->validated());
@@ -43,6 +52,9 @@ class MessengerController
         ];
     }
 
+    /*
+     *  Удалить сообщение
+     */
     public function delete(Message $message, MessengerControllerService $service): array
     {
         $service->delete($message);
