@@ -7,6 +7,9 @@ use App\Http\Requests\MessageUpdateRequest;
 use App\Models\Message;
 use App\Models\User;
 use App\Services\MessengerControllerService;
+use Illuminate\Mail\Events\MessageSent;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendedMessage;
 
 class MessengerController
 {
@@ -28,6 +31,9 @@ class MessengerController
     public function send(User $sender, User $receiver, MessageSendRequest $request, MessengerControllerService $service): array
     {
         $message = $service->createFromRequest($sender, $receiver, $request->validated());
+
+        $receiver->notify(new SendedMessage($sender));
+
         return [
             'status' => 'success',
             'message' => $message,
