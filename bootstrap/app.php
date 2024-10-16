@@ -35,8 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
                             'message' => 'Запрашиваемый ресурс не найден.'
                         ]
                     ], 404);
-                }
-                elseif ($e instanceof AuthorizationException) {
+                } elseif ($e instanceof AuthorizationException) {
                     return response()->json([
                         'fault' => [
                             'code' => 401,
@@ -50,8 +49,7 @@ return Application::configure(basePath: dirname(__DIR__))
                             'message' => 'У вас нет прав на этот ресурс',
                         ]
                     ], 403);
-                }
-                elseif ($e instanceof QueryException || $e instanceof HttpException) {
+                } elseif ($e instanceof QueryException || $e instanceof HttpException) {
                     $message = $e->getMessage() ?: 'Неверный запрос.';
                     return response()->json([
                         'fault' => [
@@ -75,6 +73,13 @@ return Application::configure(basePath: dirname(__DIR__))
                             'errors' => $e->getMessage(),
                         ]
                     ], 500);
+                } elseif ($e instanceof PDOException) {
+                    return response()->json([
+                        'fault' => [
+                            'code' => 400,
+                            'message' => 'Ошибка иньекции: ' . $e->getMessage(),
+                        ]
+                    ]);
                 }
         });
     })->create();
