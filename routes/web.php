@@ -5,6 +5,8 @@ use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\ApiOrViewGetRespond;
 use App\Http\Middleware\ApiOrViewPostRespond;
+use App\Http\Controllers\AuthController;
+use App\Http\Middleware\AuthRespond;
 use App\Http\Middleware\ApiOrViewResponse;
 use \App\Http\Controllers\MessengerController;
 
@@ -12,6 +14,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::prefix('/auth')->group(function() {
+    Route::get('/register', function () {
+        return view('auth.register');
+    });
+    Route::get('/login', function () {
+        return view('auth.login');
+    });
+});
+
+Route::prefix('/auth')->middleware(AuthRespond::class)->group(function() {
+    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+    Route::post('/login', [AuthController::class, 'token'])->name('auth.token');
+});
+
+Route::prefix('/topics')->middleware(ApiOrViewGetRespond::class)->group(function () {
 Route::prefix('/forum')->middleware(ApiOrViewGetRespond::class)->group(function () {
     Route::get('/', [TopicController::class, 'getList'])->name('topics.list');
     Route::prefix('/{topic}/comments')->group(function () {
