@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Exceptions\UserNotFoundException;
-
+use App\Http\Middleware\ExceptionRespond;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -24,11 +24,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+            $middleware->append(ExceptionRespond::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (\Throwable $e, Request $request) {
-            if ($request->is('api/*')) {
                 if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
                     return response()->json([
                         'fault' => [
@@ -75,55 +74,7 @@ return Application::configure(basePath: dirname(__DIR__))
                             'message' => 'Произошла непредвиденная ошибка',
                             'errors' => $e->getMessage(),
                         ]
-                    ],500);
-                }
-            } else {
-                if ($e instanceof NotFoundHttpException) {
-                    return response()->view('errors', [
-                        'fault' => [
-                            'code' => 404,
-                            'message' => 'Запрашиваемый ресурс не найден.'
-                        ]
-                    ], 404);
-                } elseif ($e instanceof AuthorizationException) {
-                    return response()->view('errors', [
-                        'fault' => [
-                            'code' => 401,
-                            'message' => 'Вы не авторизированны. Пожалуйста пройдите авторизацию и возвращайтесь.',
-                        ]
-                    ], 401);
-                } elseif($e instanceof AccessDeniedHttpException) {
-                    return response()->view('errors', [
-                        'fault' => [
-                            'code' => 403,
-                            'message' => 'У вас нет прав на этот ресурс',
-                        ]
-                    ], 403);
-                } elseif ($e instanceof QueryException || $e instanceof HttpException) {
-                    $message = $e->getMessage() ?: 'Неверный запрос.';
-                    return response()->view('errors', [
-                        'fault' => [
-                            'code' => 400,
-                            'message' => $message
-                        ]
-                    ], 400);
-                } elseif ($e instanceof ValidationException) {
-                    return response()->view('errors', [
-                        'fault' => [
-                            'code' => 422,
-                            'message' => 'Введены неккоректные данные. Пожалуйста пересмотрите свой запрос и попробуйте снова.',
-                            'errors' => $e->errors(),
-                        ]
-                    ], 422);
-                } elseif ($e instanceof Exception) {
-                    return response()->view('errors', [
-                        'fault' => [
-                            'code' => 500,
-                            'message' => 'Произошла непредвиденная ошибка',
-                            'errors' => $e->getMessage(),
-                        ]
                     ], 500);
                 }
-            }
         });
     })->create();
