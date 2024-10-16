@@ -31,6 +31,9 @@ class CommentControllerService
             ->onlyApproved()
             ->get();
 
+        if (count($comments) < 1)
+            return ['message' => 'Комментарии не были найдены'];
+
         return [
             'count' => count($comments),
             'comments' => $comments
@@ -62,19 +65,20 @@ class CommentControllerService
     {
         $theme = Theme::find($topic->id);
 
-        if (!$theme) {
-            throw new \Exception("Тема с таким id $topic->id не найдена");
-        }
-
         $comment = Comment::create(array_merge($data, [
             'theme_id' => $topic->id
         ]));
+
+        Log::info($comment);
+
         return $comment;
     }
 
     public function updateFromRequest(Comment $comment, array $data): Comment
     {
         $comment->update($data);
+        Log::info($comment);
+
         return $comment;
     }
 

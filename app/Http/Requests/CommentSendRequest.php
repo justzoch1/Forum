@@ -23,7 +23,7 @@ class CommentSendRequest extends FormRequest
     {
         return [
             'content' => 'required|string',
-            'user_id' => 'required|exists:users,id'
+            'user_id' => 'required|integer|exists:users,id'
         ];
     }
 }

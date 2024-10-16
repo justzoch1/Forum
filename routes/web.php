@@ -9,10 +9,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AuthRespond;
 use App\Http\Middleware\ApiOrViewResponse;
 use \App\Http\Controllers\MessengerController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/', [TopicController::class, 'getList'])->name('topics.list')->middleware(ApiOrViewGetRespond::class);
 
 Route::prefix('/auth')->group(function() {
     Route::get('/register', function () {
@@ -28,9 +31,7 @@ Route::prefix('/auth')->middleware(AuthRespond::class)->group(function() {
     Route::post('/login', [AuthController::class, 'token'])->name('auth.token');
 });
 
-Route::prefix('/topics')->middleware(ApiOrViewGetRespond::class)->group(function () {
 Route::prefix('/forum')->middleware(ApiOrViewGetRespond::class)->group(function () {
-    Route::get('/', [TopicController::class, 'getList'])->name('topics.list');
     Route::prefix('/{topic}/comments')->group(function () {
         Route::get('/', [CommentController::class, 'getListOfTopic'])->name('comments.list');
         Route::get("/search", [ CommentController::class, 'search'])->name('topics.comments.search');
@@ -53,3 +54,5 @@ Route::prefix('/messages')->middleware(ApiOrViewPostRespond::class)->group(funct
     Route::put('/{message}', [MessengerController::class, 'update'])->name('messages.update');
     Route::patch('/{message}', [MessengerController::class, 'update'])->name('messages.update');
 });
+
+Route::get('/notifications/{user}', [NotificationController::class, 'getList'])->name('notifications.list')->middleware(ApiOrViewGetRespond::class);

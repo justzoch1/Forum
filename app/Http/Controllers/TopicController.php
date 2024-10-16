@@ -10,10 +10,6 @@ class TopicController extends Controller
     {
         $topics = $repository->getList();
 
-        if (!$topics) {
-            abort(404, 'Ошибка: топики не были найдены');
-        }
-
         return ['items' => $topics];
     }
 }

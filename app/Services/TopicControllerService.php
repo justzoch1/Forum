@@ -11,7 +11,6 @@ class TopicControllerService
     public function getList(): array
     {
         $topics = Theme::all();
-
         return [
             'count' => count($topics),
             'topics' => $topics,

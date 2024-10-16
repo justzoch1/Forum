@@ -7,16 +7,18 @@ use App\Http\Requests\MessageUpdateRequest;
 use App\Models\Message;
 use App\Models\User;
 use App\Services\MessengerControllerService;
+use Illuminate\Mail\Events\MessageSent;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendedMessage;
 
 class MessengerController
 {
     /*
     *  Получить список комментариев между мельзователями
     */
-    public function getListOfUsers(User $sender, User $receiver, MessengerControllerService $service): array
+    public function getListOfUsers(User $sender, User $receiver, MessengerControllerService $service)
     {
         $message = $service->getListOfUser($sender, $receiver);
-
         return [
             'count' => count($message),
             'items' => $message
@@ -28,10 +30,9 @@ class MessengerController
     */
     public function send(User $sender, User $receiver, MessageSendRequest $request, MessengerControllerService $service): array
     {
-
         $message = $service->createFromRequest($sender, $receiver, $request->validated());
 
-        abort_unless($message, 404);
+        $receiver->notify(new SendedMessage($sender));
 
         return [
             'status' => 'success',
@@ -45,7 +46,6 @@ class MessengerController
     public function update(Message $message, MessageUpdateRequest $request, MessengerControllerService $service): array
     {
         $message = $service->updateFromRequest($message, $request->validated());
-        abort_unless($message, 500);
         return [
             'status' => 'success',
             'message' => $message
@@ -58,7 +58,6 @@ class MessengerController
     public function delete(Message $message, MessengerControllerService $service): array
     {
         $service->delete($message);
-        abort_unless($message, 500);
         return [
             'status' => 'success',
         ];
