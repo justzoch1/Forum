@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TopicController;
 use App\Http\Middleware\ApiOrViewGetRespond;
 use App\Http\Middleware\ApiOrViewPostRespond;
+use App\Http\Controllers\AuthController;
+use App\Http\Middleware\AuthRespond;
 use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\NotificationController;
 
@@ -14,6 +16,11 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/', [TopicController::class, 'getList'])->name('topics.list')->middleware(ApiOrViewGetRespond::class);
+
+Route::prefix('/auth')->middleware(AuthRespond::class)->group(function() {
+    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+    Route::post('/login', [AuthController::class, 'token'])->name('auth.token');
+});
 
 Route::prefix('/forum')->middleware(ApiOrViewGetRespond::class)->group(function () {
     Route::prefix('/{topic}/comments')->group(function () {
