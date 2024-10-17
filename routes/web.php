@@ -28,7 +28,7 @@ Route::prefix('/auth')->group(function() {
 
 Route::prefix('/auth')->middleware(AuthRespond::class)->group(function() {
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
-    Route::post('/login', [AuthController::class, 'token'])->name('auth.token');
+    Route::post('/login', [AuthController::class, 'token'])->name('auth.login');
 });
 
 Route::prefix('/forum')->middleware(ApiOrViewGetRespond::class)->group(function () {

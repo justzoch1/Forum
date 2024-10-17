@@ -1,5 +1,5 @@
 <h1>Войти в аккаунт</h1>
-<form method="POST" action="{{ route('auth.token') }}">
+<form method="POST" action="{{ route('auth.login') }}">
     @csrf
     <div>
         <label for="email">Почта:</label>

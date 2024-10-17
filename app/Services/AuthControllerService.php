@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\User;
+use http\Cookie;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class AuthControllerService
 {
@@ -13,7 +15,7 @@ class AuthControllerService
         $user = User::create($data);
 
         $token = $user->createToken("API TOKEN")->plainTextToken;
-
+        Session::put('token', $token);
         return array_merge($user->toArray(), ['token' => $token]);
     }
 
@@ -24,9 +26,8 @@ class AuthControllerService
         if (!$user || !Hash::check($data['password'], $user->password)) {
             // Обработка ошибки
         }
-
         $token = $user->createToken("API TOKEN")->plainTextToken;
-
+        Session::put('token', $token);
         return $token;
     }
 }
