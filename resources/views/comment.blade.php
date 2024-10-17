@@ -8,14 +8,9 @@
         <label for="content">Контент</label>
         <textarea name="content" id="content" rows="3" class="form-control" required></textarea>
     </div>
-    <div class="form-group">
-        <label for="user_id">Айди пользователя</label>
-        <input name="user_id" id="user_id" class="form-control" required>
-    </div>
     <button type="submit" class="btn btn-primary">Оставить комментарий</button>
 </form>
 <form action="{{ route('topics.comments.search', $topic->id) }}" method="GET">
-    @csrf
     @method('GET')
     <div class="form-group">
         <label for="content">Поиск</label>
@@ -24,7 +19,6 @@
     <button type="submit" class="btn btn-primary">Искать</button>
 </form>
 <form action="{{ route('topics.comments.sort', $topic->id) }}" method="GET">
-    @csrf
     @method('GET')
     <div class="form-group">
         <label for="sort_by">Сортировать по:</label>
