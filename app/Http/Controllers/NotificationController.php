@@ -7,7 +7,8 @@ use App\Models\User;
 
 class NotificationController extends Controller
 {
-    public function getList(User $user, NotificationControllerService $service) {
+    public function getList(NotificationControllerService $service) {
+        $user = auth()->user();
         $notifications = $service->getUserNotifications($user);
         return ['items' => $notifications];
     }

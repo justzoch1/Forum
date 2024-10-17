@@ -39,20 +39,29 @@ Route::prefix('/forum')->middleware(ApiOrViewGetRespond::class)->group(function 
     });
 });
 
-Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(function () {
-    Route::post('/{topic}', [CommentController::class, 'left'])->name('comments.left');
-    Route::delete('/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
-    Route::put('/{comment}', [CommentController::class, 'update'])->name('comments.update');
-    Route::patch('/{comment}', [CommentController::class, 'update'])->name('comments.update');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(function () {
+        Route::post('/{topic}', [CommentController::class, 'left'])->name('comments.left');
+        Route::delete('/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
+        Route::put('/{comment}', [CommentController::class, 'update'])->name('comments.update');
+        Route::patch('/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    });
+
+    Route::get('/messenger/{receiver}', [MessengerController::class, 'getListOfUsers'])->middleware(ApiOrViewGetRespond::class);
+
+    Route::prefix('/messages')->middleware(ApiOrViewPostRespond::class)->group(function () {
+        Route::post('/{receiver}', [MessengerController::class, 'send'])->name('messages.left');
+        Route::delete('/{message}', [MessengerController::class, 'delete'])->name('messages.delete');
+        Route::put('/{message}', [MessengerController::class, 'update'])->name('messages.update');
+        Route::patch('/{message}', [MessengerController::class, 'update'])->name('messages.update');
+    });
+
+    Route::get('/notifications', [NotificationController::class, 'getList'])->name('notifications.list')->middleware(ApiOrViewGetRespond::class);
+
+    Route::prefix('/answers')->middleware(ApiOrViewPostRespond::class)->group(function () {
+        Route::post('/{topic}/{comment}', [AnswerController::class, 'create'])->name('answers.create');
+        Route::delete('/{answer}', [AnswerController::class, 'delete'])->name('answers.delete');
+        Route::put('/{answer}', [AnswerController::class, 'update'])->name('answers.update');
+        Route::patch('/{answer}', [AnswerController::class, 'update'])->name('answers.update');
+    });
 });
-
-Route::get('/messenger/{sender}/{receiver}', [MessengerController::class, 'getListOfUsers'])->name('messages.list')->middleware(ApiOrViewGetRespond::class);
-
-Route::prefix('/messages')->middleware(ApiOrViewPostRespond::class)->group(function () {
-    Route::post('/{sender}/{receiver}', [MessengerController::class, 'send'])->name('messages.left');
-    Route::delete('/{message}', [MessengerController::class, 'delete'])->name('messages.delete');
-    Route::put('/{message}', [MessengerController::class, 'update'])->name('messages.update');
-    Route::patch('/{message}', [MessengerController::class, 'update'])->name('messages.update');
-});
-
-Route::get('/notifications/{user}', [NotificationController::class, 'getList'])->name('notifications.list')->middleware(ApiOrViewGetRespond::class);
