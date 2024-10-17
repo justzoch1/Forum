@@ -20,8 +20,8 @@ class MessageFactory extends Factory
         return [
             'content' => $this->faker->paragraph(),
             'status' => $this->faker->randomElement(['was read', 'was unread']),
-            'sender_id' => User::factory(),
-            'receiver_id' => User::factory(),
+            'sender_id' => User::all()->random(),
+            'receiver_id' => User::all()->random(),
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -10,11 +10,17 @@ class MessengerControllerService
 {
     public function getListOfUser(User $sender, User $receiver): array
     {
-        $messages = Message::where('sender_id', $sender->id)
-            ->where('receiver_id', $receiver->id)
-            ->orderBy('created_at', 'desc')
-            ->withSenderAndReceiver()
-            ->get();
+        $messages = Message::where(function ($query) use ($sender) {
+            $query->where('sender_id', $sender->id)
+                ->orWhere('receiver_id', $sender->id);
+        })
+        ->where(function ($query) use ($receiver) {
+            $query->where('sender_id', $receiver->id)
+                ->orWhere('receiver_id', $receiver->id);
+        })
+        ->orderBy('created_at', 'desc')
+        ->withSenderAndReceiver()
+        ->get();
 
         return [
             'count' => count($messages),
