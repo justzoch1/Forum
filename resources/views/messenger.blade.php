@@ -5,6 +5,7 @@
         @foreach($items->messages as $message)
             <h3>Имя пользователя: {{ $message->sender_name }}</h3>
             <p> Контент:{{ $message->content }}</p>
+            @if(auth()->user()->id == $message->sender_id)
             <div>
                 <form action="{{ route('messages.delete', $message->id) }}" method="POST">
                     @csrf
@@ -22,6 +23,7 @@
                     <button type="submit" class="btn btn-primary">Обновить комментарий</button>
                 </form>
             </div>
+            @endif
         @endforeach
     </div>
     <div>

@@ -45,7 +45,7 @@ Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(funct
     Route::patch('/{comment}', [CommentController::class, 'update'])->name('comments.update');
 });
 
-Route::get('/messenger/{receiver}', [MessengerController::class, 'getListOfUsers'])->middleware(ApiOrViewGetRespond::class);
+Route::get('/messenger/{receiver}', [MessengerController::class, 'getListOfUsers'])->middleware(ApiOrViewGetRespond::class)->name('messenger');
 
 Route::prefix('/messages')->middleware(ApiOrViewPostRespond::class)->group(function () {
     Route::post('/{receiver}', [MessengerController::class, 'send'])->name('messages.left');

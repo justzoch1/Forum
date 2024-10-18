@@ -58,7 +58,14 @@
                     </x-slot>
                 </x-dropdown>
             </div>
+            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <x-nav-link :href="route('notifications.list')" :active="request()->routeIs('dashboard')">
+                    {{ __('Notifications') }}
+                </x-nav-link>
+            </div>
             @endauth
+
+
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">

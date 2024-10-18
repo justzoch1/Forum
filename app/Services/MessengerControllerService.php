@@ -18,7 +18,7 @@ class MessengerControllerService
             $query->where('sender_id', $receiver->id)
                 ->orWhere('receiver_id', $receiver->id);
         })
-        ->orderBy('created_at', 'desc')
+        ->orderBy('created_at', 'asc')
         ->withSenderAndReceiver()
         ->get();
         Log::info(['сообщения' => $messages]);

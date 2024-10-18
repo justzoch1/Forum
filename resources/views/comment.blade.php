@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
+@can('create', App\Models\Comment::class)
 <form action="{{ route('comments.left', $topic->id) }}" method="POST">
     @csrf
     @method('POST')
@@ -10,6 +11,7 @@
     </div>
     <button type="submit" class="btn btn-primary">Оставить комментарий</button>
 </form>
+@endcan
 <form action="{{ route('topics.comments.search', $topic->id) }}" method="GET">
     @method('GET')
     <div class="form-group">
@@ -34,9 +36,10 @@
 @endif
 <div>
     @foreach($items->comments as $comment)
-        <h3>Имя пользователя: {{ $comment->user_name }} Email: {{ $comment->user_email }} Тема: {{$comment->theme_name}}</h4>
+        <h3>Имя пользователя: <a href="{{ route('messenger', $comment->user_id) }}">{{ $comment->user_name }}</a> Email: {{ $comment->user_email }} Тема: {{$comment->theme_name}}</h4>
         <p> Контент:{{ $comment->content }}</p>
         <div>
+            @if(auth()->user()->id == $comment->user_id)
             <form action="{{ route('comments.delete', $comment->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
@@ -51,6 +54,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Обновить комментарий</button>
             </form>
+            @endif
         </div>
         <form action="{{ route('answers.create', [ $topic->id, $comment->id ]) }}" method="POST">
             @csrf
@@ -64,24 +68,26 @@
         <ul>
             @foreach($comment->answers as $answer)
                 <li>
-                    <h4>Имя пользователя: {{ $answer->user_name }} Email: {{ $answer->user_email }} Тема: {{$comment->theme_name}} Дата публикации: ({{ $answer->created_at }})</h3>
+                    <h4>Имя пользователя: <a href="{{ route('messenger', $answer->user_id) }}">{{ $answer->user_name }}</a> Email: {{ $answer->user_email }} Тема: {{$comment->theme_name}} Дата публикации: ({{ $answer->created_at }})</h3>
                     <p>Контент: {{ $answer->content }}</p>
                 </li>
                 <div>
-                    <form action="{{ route('answers.delete', $answer->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Удалить ответ</button>
-                    </form>
-                    <form action="{{ route('answers.update', $answer->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-group">
-                            <label for="content">Контент</label>
-                            <textarea name="content" id="content" rows="3" class="form-control" required>{{ $answer->content }}</textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Обновить ответ</button>
-                    </form>
+                    @if(auth()->user()->id == $answer->user_id)
+                        <form action="{{ route('answers.delete', $answer->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Удалить ответ</button>
+                        </form>
+                        <form action="{{ route('answers.update', $answer->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="form-group">
+                                <label for="content">Контент</label>
+                                <textarea name="content" id="content" rows="3" class="form-control" required>{{ $answer->content }}</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Обновить ответ</button>
+                        </form>
+                    @endif
                 </div>
             @endforeach
         </ul>

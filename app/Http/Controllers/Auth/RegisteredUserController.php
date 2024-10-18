@@ -47,9 +47,12 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('topics.list', absolute: false));
     }
 
+    /*
+     * Получить токен авторизации после регистрации
+     */
     public function storeWithToken(RegisterRequest $request, AuthControllerService $service): array
     {
         $user = $service->register($request->validated());
