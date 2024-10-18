@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use http\Cookie;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -27,7 +28,7 @@ class AuthControllerService
             // Обработка ошибки
         }
         $token = $user->createToken("API TOKEN")->plainTextToken;
-        Session::put('token', $token);
+        Auth::attempt();
         return $token;
     }
 }
