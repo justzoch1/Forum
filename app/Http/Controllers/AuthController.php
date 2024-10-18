@@ -20,12 +20,4 @@ class AuthController extends Controller
             'user' => $user,
         ];
     }
-
-    public function token(LoginRequest $request, AuthControllerService $service): array
-    {
-        $token = $service->token($request->validated());
-        return [
-            'token' => $token,
-        ];
-    }
 }
