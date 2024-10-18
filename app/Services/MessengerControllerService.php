@@ -21,7 +21,7 @@ class MessengerControllerService
         ->orderBy('created_at', 'desc')
         ->withSenderAndReceiver()
         ->get();
-
+        Log::info(['сообщения' => $messages]);
         return [
             'count' => count($messages),
             'messages' => $messages

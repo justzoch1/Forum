@@ -16,7 +16,7 @@ class AuthControllerService
         $user = User::create($data);
 
         $token = $user->createToken("API TOKEN")->plainTextToken;
-        Session::put('token', $token);
+
         return array_merge($user->toArray(), ['token' => $token]);
     }
 
@@ -28,7 +28,7 @@ class AuthControllerService
             // Обработка ошибки
         }
         $token = $user->createToken("API TOKEN")->plainTextToken;
-        Auth::attempt();
+
         return $token;
     }
 }

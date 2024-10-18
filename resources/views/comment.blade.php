@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.app')
 @section('content')
 
 <form action="{{ route('comments.left', $topic->id) }}" method="POST">
@@ -68,19 +68,19 @@
                     <p>Контент: {{ $answer->content }}</p>
                 </li>
                 <div>
-                    <form action="{{ route('comments.delete', $answer->id) }}" method="POST">
+                    <form action="{{ route('answers.delete', $answer->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Удалить комментарий</button>
+                        <button type="submit" class="btn btn-danger">Удалить ответ</button>
                     </form>
-                    <form action="{{ route('comments.update', $answer->id) }}" method="POST">
+                    <form action="{{ route('answers.update', $answer->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="form-group">
                             <label for="content">Контент</label>
                             <textarea name="content" id="content" rows="3" class="form-control" required>{{ $answer->content }}</textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Обновить комментарий</button>
+                        <button type="submit" class="btn btn-primary">Обновить ответ</button>
                     </form>
                 </div>
             @endforeach
