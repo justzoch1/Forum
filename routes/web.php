@@ -1,35 +1,34 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\TopicController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TopicController;
 use App\Http\Middleware\ApiOrViewGetRespond;
 use App\Http\Middleware\ApiOrViewPostRespond;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AuthRespond;
-use App\Http\Middleware\ApiOrViewResponse;
-use \App\Http\Controllers\MessengerController;
+use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\NotificationController;
 
+use App\Http\Controllers\ProfileController;
+
 Route::get('/', function () {
-    return view('welcome');
+    return \route('topics.list');
+});
+
+Route::get('/dashboard', function () {
+    return \route('topics.list');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 Route::get('/', [TopicController::class, 'getList'])->name('topics.list')->middleware(ApiOrViewGetRespond::class);
-
-Route::prefix('/auth')->group(function() {
-    Route::get('/register', function () {
-        return view('auth.register');
-    });
-    Route::get('/login', function () {
-        return view('auth.login');
-    });
-});
-
-Route::prefix('/auth')->middleware(AuthRespond::class)->group(function() {
-    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
-    Route::post('/login', [AuthController::class, 'token'])->name('auth.token');
-});
 
 Route::prefix('/forum')->middleware(ApiOrViewGetRespond::class)->group(function () {
     Route::prefix('/{topic}/comments')->group(function () {
@@ -46,13 +45,22 @@ Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(funct
     Route::patch('/{comment}', [CommentController::class, 'update'])->name('comments.update');
 });
 
-Route::get('/messenger/{sender}/{receiver}', [MessengerController::class, 'getListOfUsers'])->name('messages.list')->middleware(ApiOrViewGetRespond::class);
+Route::get('/messenger/{receiver}', [MessengerController::class, 'getListOfUsers'])->middleware(ApiOrViewGetRespond::class)->name('messenger');
 
 Route::prefix('/messages')->middleware(ApiOrViewPostRespond::class)->group(function () {
-    Route::post('/{sender}/{receiver}', [MessengerController::class, 'send'])->name('messages.left');
+    Route::post('/{receiver}', [MessengerController::class, 'send'])->name('messages.left');
     Route::delete('/{message}', [MessengerController::class, 'delete'])->name('messages.delete');
     Route::put('/{message}', [MessengerController::class, 'update'])->name('messages.update');
     Route::patch('/{message}', [MessengerController::class, 'update'])->name('messages.update');
 });
 
-Route::get('/notifications/{user}', [NotificationController::class, 'getList'])->name('notifications.list')->middleware(ApiOrViewGetRespond::class);
+Route::get('/notifications', [NotificationController::class, 'getList'])->name('notifications.list')->middleware(ApiOrViewGetRespond::class);
+
+Route::prefix('/answers')->middleware(ApiOrViewPostRespond::class)->group(function () {
+    Route::post('/{topic}/{comment}', [AnswerController::class, 'create'])->name('answers.create');
+    Route::delete('/{answer}', [AnswerController::class, 'delete'])->name('answers.delete');
+    Route::put('/{answer}', [AnswerController::class, 'update'])->name('answers.update');
+    Route::patch('/{answer}', [AnswerController::class, 'update'])->name('answers.update');
+});
+
+require __DIR__.'/auth.php';
