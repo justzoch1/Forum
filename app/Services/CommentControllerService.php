@@ -25,21 +25,6 @@ class CommentControllerService
         ];
     }
 
-    public function search(Theme $topic, string $q): array {
-        $comments = Comment::where('theme_id', $topic->id)
-            ->where('content', 'like', '%' . $q . '%')
-            ->withAnswers()
-            ->withThemeAndUser()
-            ->onlyApproved()
-            ->get();
-
-        Log::info($comments);
-        return [
-            'count' => count($comments),
-            'comments' => $comments
-        ];
-    }
-
     public function sort(Theme $topic, string $by): array {
         $comments = $by == 'popular'
             ? Comment::where('theme_id', $topic->id)

@@ -20,8 +20,10 @@ class ThemeFactory extends Factory
         return [
             'uuid' => (string) Str::uuid(),
             'name' => $this->faker->sentence(3),
-            'description' => $this->faker->paragraph,
+            'description' => $this->faker->realText(),
+            'image' => $this->faker->imageUrl(),
             'logo' => $this->faker->imageUrl(640, 480, 'business'),
+            'preview' => $this->faker->paragraph(),
             'created_at' => now(),
             'updated_at' => now(),
         ];

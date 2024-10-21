@@ -13,6 +13,8 @@ class Theme extends Model
         'name',
         'description',
         'logo',
+        'preview',
+        'image'
     ];
 
     public function comments() {
