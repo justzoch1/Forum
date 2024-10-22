@@ -5,19 +5,20 @@ namespace App\Services;
 
 use App\Models\Comment;
 use App\Models\Theme;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 use \Illuminate\Database\Eloquent\Collection;
 
 class ThemeControllerService
 {
-    public function getCommentsListOfTopic(Theme $topic): Collection
+    public function getCommentsListOfTopic(Theme $topic): LengthAwarePaginator
     {
         $comments = Comment::where('theme_id', $topic->id)
             ->withAnswers()
             ->withThemeAndUser()
             ->onlyApproved()
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(6);
 
         return $comments;
     }

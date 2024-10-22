@@ -41,7 +41,7 @@
                 </div>
                 <div class="ant106_post-comments mb-4">
                     <h3 class="ant106_post-inner-title">Комментарии</h3>
-                    @foreach ($items->comments as $comment)
+                    @foreach ($items->comments->data as $comment)
                         <div class="ant106_post-comment-item">
                             <div class="ant106_post-comment-img">
                                 <img src="/img/comment-1.png" alt="">
@@ -88,6 +88,34 @@
                     </div>
                 </div>
             </aside>
+
+            <div class="ant106_post-comment-form">
+                <h3 class="ant106_post-inner-title">Написать комментарий</h3>
+                <form id="ant106_post-comment-form" name="comment_form" class="ant106_post-comment-form" action="#" method="POST">
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" name="first_name" id="name" class="form-control" value="" placeholder="Ваше имя" required="">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="email" name="email" id="email" class="form-control" value="" placeholder="yourmail@gmail.com" required="">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea name="message" id="message" class="form-control" rows="7" placeholder="Сообщение..." required=""></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <button class="ant106_post-theme-btn mt-2" type="submit">Отправить</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <!-- Container /- -->

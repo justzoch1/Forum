@@ -18,7 +18,6 @@ class AnswerFactory extends Factory
      */
     public function definition(): array
     {
-
         return [
             'comment_id' => Comment::all()->random(),
             'user_id' => User::factory(),
