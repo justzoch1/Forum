@@ -25,27 +25,6 @@ class CommentControllerService
         ];
     }
 
-    public function sort(Theme $topic, string $by): array {
-        $comments = $by == 'popular'
-            ? Comment::where('theme_id', $topic->id)
-                ->onlyApproved()
-                ->withAnswers()
-                ->withThemeAndUser()
-                ->SortByAnswerCount()
-                ->get()
-            : Comment::where('theme_id', $topic->id)
-                ->orderBy('created_at', 'asc')
-                ->onlyApproved()
-                ->withAnswers()
-                ->withThemeAndUser()
-                ->get();
-
-        return [
-            'count' => count($comments),
-            'comments' => $comments
-        ];
-    }
-
     public function createFromRequest(array $data, Theme $topic, User $user): Comment
     {
         $comment = Comment::create(array_merge($data, [

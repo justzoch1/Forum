@@ -10,28 +10,28 @@
                     <img src="/img/single.jpg" alt="">
                     <div class="mt-3 mb-3">
                         <span class="ant106_post-date">{{ \Carbon\Carbon::parse($items->topic->created_at ) }}</span>
-                        <span class="ant106_post-admin">От:<a href="#">Админ</a></span>
+                        <span class="ant106_post-admin">Автор:<a href="#">{{$items->topic->user_name}}</a></span>
                     </div>
                     {{ $items->topic->description }}
                     </div>
                 <div class="ant106_post-related-post mb-4">
                     <h3 class="ant106_post-inner-title">Еще записи</h3>
                     <div class="row text-center">
-                        @foreach($items->next->data as $topic)
+                        @foreach($items->next as $topic)
                         <div class="col-md-6">
                             <div class="ant106_post-latest-news-box">
                                 <div class="ant106_post-latest-news-img">
                                     <img src="/img/b-1.jpg" alt="">
                                 </div>
                                 <div class="ant106_post-latest-news-content">
-                                    <h3><a href="#!">{{ $topic->name }}</a></h3>
+                                    <h3><a href="{{ route('topics.get.one', $topic->id) }}">{{ $topic->name }}</a></h3>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($topic->created_at ) }}$</span>
                                     <p>{{ $topic->description }}</p>
                                     <ul class="ant106_post-blog-statistics">
                                         <li><i class="fas fa-comments"></i>{{ $topic->comments_count }}</li>
                                     </ul>
                                     <div class="ant106_post-news-btn">
-                                        <a href="#!" class="ant106_post-theme-btn">Читать далее</a>
+                                        <a href="{{ route('topics.get.one', $topic->id) }}" class="ant106_post-theme-btn">Читать далее</a>
                                     </div>
                                 </div>
                             </div>
@@ -39,18 +39,39 @@
                         @endforeach
                     </div>
                 </div>
+                <div class="ant106_comment-sort col-md-8 mb-4">
+                    <form action="{{ route('topics.comments.sort', $items->topic->id) }}" method="GET" class="d-flex align-items-center mb-3">
+                        @csrf
+                        @method('GET')
+                        <label for="sort_by" class="col-md-4 mr-3">Сортировать по:</label>
+                        <select name="by" id="sort_by" class="form-control mr-2">
+                            <option value="popular">Популярности</option>
+                            <option value="new">Дате загрузки</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Сортировать</button>
+                    </form>
+                </div>
                 <div class="ant106_post-comments mb-4">
                     <h3 class="ant106_post-inner-title">Комментарии</h3>
-                    @foreach ($items->comments->data as $comment)
+                    @foreach ($items->comments as $comment)
                         <div class="ant106_post-comment-item">
                             <div class="ant106_post-comment-img">
                                 <img src="/img/comment-1.png" alt="">
                             </div>
                             <div class="ant106_post-comment-content">
-                                <h6>{{ $comment->user_name }}</h6>
+                                <h6><a href="{{ route('messenger', $comment->user_id )}}" class="text-dark">{{ $comment->user_name }}</a></h6>
                                 <span class="ant106_post-date">{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</span>
                                 <p>{{ $comment->content }}</p>
-                                <a href="#" class="ant106_post-replay">Ответить</a>
+                                <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $comment->id }}')">Ответить</a>
+                                @can('create', App\Models\Comment::class)
+                                    <div id="reply-form-{{ $comment->id }}" class="reply-form mb-3" style="display: none;">
+                                        <form method="POST" action="{{ route('answers.create',[$comment->theme_id, $comment->id]) }}">
+                                            @csrf
+                                            <textarea name="content" class="form-control" rows="3" placeholder="Ваш ответ..."></textarea>
+                                            <button type="submit" class="btn btn-primary mt-2">Отправить</button>
+                                        </form>
+                                    </div>
+                                @endcan
                             </div>
                         </div>
                         @foreach ($comment->answers as $answer)
@@ -59,11 +80,26 @@
                                     <img src="/img/comment-2.png" alt="">
                                 </div>
                                 <div class="ant106_post-comment-content">
-                                    <h6>{{ $answer->user_name }}</h6>
+                                    <h6><a href="{{ route('messenger', $answer->user_id )}}" class="text-dark">{{ $answer->user_name }}</a></h6>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($answer->created_at)->diffForHumans() }}</span>
                                     <p>{{ $answer->content }}</p>
-                                    <a href="#" class="ant106_post-replay">Ответить</a>
                                 </div>
+                                @if(auth()->user()->id == $answer->user_id)
+                                    <form action="{{ route('answers.delete', $answer->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Удалить ответ</button>
+                                    </form>
+                                    <form action="{{ route('answers.update', $answer->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="form-group">
+                                            <label for="content">Контент</label>
+                                            <textarea name="content" id="content" rows="3" class="form-control" required>{{ $answer->content }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Обновить ответ</button>
+                                    </form>
+                                @endif
                             </div>
                         @endforeach
                     @endforeach
@@ -81,31 +117,23 @@
                     <div class="ant106_post-widget news-ant106_post-widget">
                         <h3 class="ant106_post-widget-title">Последние записи</h3>
                         <ul class="ant106_post-list-style-one">
-                            @foreach($items->latest->data as $topic)
-                                <li><a href="#!">{{ $topic->name }}</a></li>
+                            @foreach($items->latest as $topic)
+                                <li><a href="{{ route('topics.get.one', $topic->id) }}">{{ $topic->name }}</a></li>
                             @endforeach
                         </ul>
                     </div>
                 </div>
             </aside>
 
-            <div class="ant106_post-comment-form">
-                <h3 class="ant106_post-inner-title">Написать комментарий</h3>
-                <form id="ant106_post-comment-form" name="comment_form" class="ant106_post-comment-form" action="#" method="POST">
-                    <div class="row clearfix">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" name="first_name" id="name" class="form-control" value="" placeholder="Ваше имя" required="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="email" name="email" id="email" class="form-control" value="" placeholder="yourmail@gmail.com" required="">
-                            </div>
-                        </div>
+            @can('create', App\Models\Comment::class)
+                <div class="ant106_post-comment-form col-md-8">
+                    <h3 class="ant106_post-inner-title"> Написать комментарий</h3>
+                    <form id="ant106_post-comment-form" class="ant106_post-comment-form" action="{{ route('comments.left', $items->topic->id) }}" method="POST">
+                        @csrf
+                        @method('POST')
                         <div class="col-md-12">
                             <div class="form-group">
-                                <textarea name="message" id="message" class="form-control" rows="7" placeholder="Сообщение..." required=""></textarea>
+                                <textarea class="form-control" rows="7" placeholder="Сообщение..." required="" name="content" id="content" rows="3" class="form-control" required></textarea>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -113,9 +141,9 @@
                                 <button class="ant106_post-theme-btn mt-2" type="submit">Отправить</button>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
+            @endcan
         </div>
     </div>
     <!-- Container /- -->

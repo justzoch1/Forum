@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -24,6 +25,7 @@ class ThemeFactory extends Factory
             'image' => $this->faker->imageUrl(),
             'logo' => $this->faker->imageUrl(640, 480, 'business'),
             'preview' => $this->faker->paragraph(),
+            'user_id' => User::factory(),
             'created_at' => now(),
             'updated_at' => now(),
         ];

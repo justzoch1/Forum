@@ -70,17 +70,4 @@ class CommentController extends Controller
             'status' => 'success',
         ];
     }
-
-    /*
-    * Сортировать по популярности и дате загрузки
-    */
-    public function sort(Theme $topic, Request $request, CommentControllerService $service): array
-    {
-        $comments = $service->sort($topic, $request->by);
-        return [
-            'status' => 'success',
-            'items' => $comments,
-            'topic' => $topic
-        ];
-    }
 }

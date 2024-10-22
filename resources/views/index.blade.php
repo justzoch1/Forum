@@ -12,21 +12,21 @@
                                   <img src="/img/b-1.jpg" alt=""> {{--  Пока нет поля image --}}
                                 </div>
                                 <div class="ant106_post-latest-news-content">
-                                    <h3><a href="blog-single.html">{{ $topic->name }}</a></h3>
+                                    <h3><a href="{{ route('topics.get.one', $topic->id) }}">{{ $topic->name }}</a></h3>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($topic->created_at) }}</span>
                                     <p>{{$topic->preview}}</p>
                                     <ul class="ant106_post-blog-statistics">
                                         <li><i class="fas fa-comments"></i>{{ $topic->comments_count }}</li>
                                     </ul>
                                     <div class="ant106_post-news-btn">
-                                        <a href="blog-single.html" class="ant106_post-theme-btn">Читать далее</a>
+                                        <a href="{{ route('topics.get.one', $topic->id) }}" class="ant106_post-theme-btn">Читать далее</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                         <div class="col text-center">
-                            <a href="#" class="ant106_post-theme-btn" id="loadMoreBtn">Загрузить еще</a>
+                            <a href="#" class="ant106_post-theme-btn" id="loadMoreBtn">Следующая страница</a>
                         </div>
                 </div>
             </main>
@@ -42,8 +42,8 @@
                     <div class="ant106_post-widget news-ant106_post-widget">
                         <h3 class="ant106_post-widget-title">Последние записи</h3>
                         <ul class="ant106_post-list-style-one">
-                            @foreach($items->latest->data as $topic)
-                                <li><a href="#!">{{ $topic->name }}</a></li>
+                            @foreach($items->latest as $topic)
+                                <li><a href="{{ route('topics.get.one', $topic->id) }}">{{ $topic->name }}</a></li>
                             @endforeach
                         </ul>
                     </div>

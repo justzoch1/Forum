@@ -11,6 +11,7 @@ class Theme extends Model
 
     protected $fillable = [
         'name',
+        'user_id',
         'description',
         'logo',
         'preview',
@@ -19,5 +20,9 @@ class Theme extends Model
 
     public function comments() {
         return $this->hasMany(Comment::class);
+    }
+
+    public function scopeWithUser($query) {
+        $query->join('users', 'themes.user_id', '=', 'users.id')->select('themes.*', 'users.name as user_name');
     }
 }

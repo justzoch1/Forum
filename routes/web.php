@@ -16,11 +16,11 @@ use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
-    return redirect()->route('topics.get.one');
+    return redirect()->route('blog.index');
 });
 
 Route::get('/dashboard', function () {
-    return \route('topics.list');
+    return \route('blog.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('/blog')->middleware(ApiOrViewGetRespond::class)->group(function () {
     Route::get('/', [IndexController::class, 'index'])->name('blog.index')->middleware(ApiOrViewGetRespond::class);
-    Route::get("/sort", [ CommentController::class, 'sort'])->name('topics.comments.sort');
+    Route::get("/{topic}/sort", [ ThemeController::class, 'sort'])->name('topics.comments.sort');
     Route::get("/search", [ IndexController::class, 'search'])->name('topics.search');
     Route::get("/{topic}", [ThemeController::class, 'index'])->name('topics.get.one');
 });

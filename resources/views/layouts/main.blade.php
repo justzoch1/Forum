@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="/css/ant106_post.css">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/jquery.js"></script>
     <script src="/js/ant106_post.js"></script>
-
 </head>
 <body>
     @include('layouts.header')

@@ -25,10 +25,8 @@ Route::prefix('/blog')->middleware(ApiOrViewGetRespond::class)->group(function (
     Route::get("/{topic}", [ThemeController::class, 'index'])->name('api.topics.get.one');
 });
 
-Route::prefix('/auth')->middleware(AuthRespond::class)->group(function() {
-    Route::post('/register', [RegisteredUserController::class, 'storeWithToken'])->name('api.auth.register');
-    Route::post('/login', [AuthenticatedTokenController::class, 'token'])->name('api.auth.login');
-});
+Route::post('/register', [RegisteredUserController::class, 'storeWithToken'])->name('api.auth.register');
+Route::post('/login', [AuthenticatedTokenController::class, 'token'])->name('api.auth.login');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(function () {

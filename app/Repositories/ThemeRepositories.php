@@ -5,13 +5,15 @@ namespace App\Repositories;
 use App\Models\Theme;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
-use Ramsey\Collection\Collection;
+use Illuminate\Support\Collection;
 
 class ThemeRepositories
 {
-    public function getLatestList(): LengthAwarePaginator
+    public function getLatestList(): Collection
     {
-        $topics = Theme::orderBy('created_at', 'desc')->paginate(6);
+        $topics = Theme::latest('id')
+            ->limit(8)
+            ->get();
 
         return $topics;
     }
@@ -25,7 +27,7 @@ class ThemeRepositories
 
     public function getOne(Theme $topic): Theme
     {
-        $topic = Theme::findOrFail($topic->id);
+        $topic = Theme::withUser()->findOrFail($topic->id);
         Log::info($topic);
         return $topic;
     }

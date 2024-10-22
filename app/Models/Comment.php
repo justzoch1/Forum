@@ -40,7 +40,8 @@ class Comment extends Model
             $query->join('comments', 'comments.id', '=', 'answers.comment_id')
                 ->join('users', 'users.id', '=', 'answers.user_id')
                 ->join('themes as answer_themes', 'answer_themes.id', '=', 'comments.theme_id')
-                ->select(['answers.*', 'users.name as user_name', 'answer_themes.name as theme_name', 'users.email as user_email', 'comments.last_updated as last_updated']);
+                ->select(['answers.*', 'users.name as user_name', 'answer_themes.name as theme_name', 'users.email as user_email', 'comments.last_updated as last_updated'])
+                ->orderBy('created_at', 'asc');
         }]);
     }
 

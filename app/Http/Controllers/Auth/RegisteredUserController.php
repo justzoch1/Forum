@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('topics.list', absolute: false));
+        return redirect(route('blog.index', absolute: false));
     }
 
     /*

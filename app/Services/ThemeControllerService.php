@@ -6,31 +6,35 @@ namespace App\Services;
 use App\Models\Comment;
 use App\Models\Theme;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use \Illuminate\Database\Eloquent\Collection;
+
 
 class ThemeControllerService
 {
-    public function getCommentsListOfTopic(Theme $topic): LengthAwarePaginator
+    public function getCommentsListOfTopic(Theme $topic): Collection
     {
         $comments = Comment::where('theme_id', $topic->id)
             ->withAnswers()
             ->withThemeAndUser()
             ->onlyApproved()
             ->orderBy('created_at', 'desc')
-            ->paginate(6);
+            ->paginate(6)
+            ->collect();
 
         return $comments;
     }
 
-    public function getNextTopic()
+    public function getNextTopic(): Collection
     {
-        $topics = Theme::withCount('comments')->paginate(2);
+        $topics = Theme::withCount('comments')
+            ->paginate(2)
+            ->collect();
 
         return $topics;
     }
 
-    public function search(?string $q = '')
+    public function search(?string $q = ''): Collection
     {
         $query = Theme::query();
 
@@ -47,5 +51,25 @@ class ThemeControllerService
         Log::info($themes);
 
         return $themes;
+    }
+
+    public function sort(Theme $topic, string $by): Collection {
+        $comments = $by == 'popular'
+            ? Comment::where('theme_id', $topic->id)
+                ->onlyApproved()
+                ->withAnswers()
+                ->withThemeAndUser()
+                ->SortByAnswerCount()
+                ->paginate(6)
+                ->collect()
+            : Comment::where('theme_id', $topic->id)
+                ->onlyApproved()
+                ->withAnswers()
+                ->withThemeAndUser()
+                ->orderBy('created_at', 'asc')
+                ->paginate(6)
+                ->collect();
+
+        return $comments;
     }
 }
