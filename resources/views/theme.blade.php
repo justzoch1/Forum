@@ -5,24 +5,20 @@
     <div class="container">
         <div class="row">
             <main class="col-lg-8 ant106_post-blog-area">
-                <div class="ant106_post-blog-details-content bg-white">
+                <div class="ant106_post-blog-details-content bg-white mb-4">
                     <h2 class="mb-4">{{ $items->topic->name }}</h2>
-                    <img src="/img/single.jpg" alt="">
                     <div class="mt-3 mb-3">
                         <span class="ant106_post-date">{{ \Carbon\Carbon::parse($items->topic->created_at ) }}</span>
                         <span class="ant106_post-admin">Автор:<a href="#">{{$items->topic->user_name}}</a></span>
                     </div>
                     {{ $items->topic->description }}
-                    </div>
+                </div>
                 <div class="ant106_post-related-post mb-4">
                     <h3 class="ant106_post-inner-title">Еще записи</h3>
                     <div class="row text-center">
                         @foreach($items->next as $topic)
                         <div class="col-md-6">
                             <div class="ant106_post-latest-news-box">
-                                <div class="ant106_post-latest-news-img">
-                                    <img src="/img/b-1.jpg" alt="">
-                                </div>
                                 <div class="ant106_post-latest-news-content">
                                     <h3><a href="{{ route('topics.get.one', $topic->id) }}">{{ $topic->name }}</a></h3>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($topic->created_at ) }}$</span>
@@ -55,9 +51,6 @@
                     <h3 class="ant106_post-inner-title">Комментарии</h3>
                     @foreach ($items->comments as $comment)
                         <div class="ant106_post-comment-item">
-                            <div class="ant106_post-comment-img">
-                                <img src="/img/comment-1.png" alt="">
-                            </div>
                             <div class="ant106_post-comment-content">
                                 <h6><a href="{{ route('messenger', $comment->user_id )}}" class="text-dark">{{ $comment->user_name }}</a></h6>
                                 <span class="ant106_post-date">{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</span>
@@ -76,11 +69,8 @@
                         </div>
                         @foreach ($comment->answers as $answer)
                             <div class="ant106_post-comment-item ant106_post-replay-comment">
-                                <div class="ant106_post-comment-img">
-                                    <img src="/img/comment-2.png" alt="">
-                                </div>
                                 <div class="ant106_post-comment-content">
-                                    <h6><a href="{{ route('messenger', $answer->user_id )}}" class="text-dark">{{ $answer->user_name }}</a></h6>
+                                    <h6>От: <a href="{{ route('messenger', $answer->user_id )}}" class="text-dark">{{ $answer->user_name }}</a> Кому: </h6>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($answer->created_at)->diffForHumans() }}</span>
                                     <p>{{ $answer->content }}</p>
                                 </div>

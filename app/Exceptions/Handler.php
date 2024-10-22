@@ -65,7 +65,24 @@ class Handler extends ExceptionHandler
                             'message' => $message
                         ]
                     ], 400);
-                } else {
+                } elseif ($e instanceof ValidationException || $e instanceof BadRequestHttpException) {
+                    return response()->json([
+                        'fault' => [
+                            'code' => 422,
+                            'message' => 'Введены неккоректные данные. Пожалуйста пересмотрите свой запрос и попробуйте снова.',
+                            'errors' => $e->errors(),
+                        ]
+                    ], 422);
+                } elseif ($e instanceof Exception) {
+                    return response()->json([
+                        'fault' => [
+                            'code' => 500,
+                            'message' => 'Произошла непредвиденная ошибка',
+                            'errors' => $e->getMessage(),
+                        ]
+                    ],500);
+                }
+            } else {
                 if ($e instanceof NotFoundHttpException) {
                     return response()->view('errors', [
                         'fault' => [
@@ -111,23 +128,6 @@ class Handler extends ExceptionHandler
                             'errors' => $e->getMessage(),
                         ]
                     ], 500);
-                } elseif ($e instanceof ValidationException || $e instanceof BadRequestHttpException) {
-                    return response()->json([
-                        'fault' => [
-                            'code' => 422,
-                            'message' => 'Введены неккоректные данные. Пожалуйста пересмотрите свой запрос и попробуйте снова.',
-                            'errors' => $e->errors(),
-                        ]
-                    ], 422);
-                } elseif ($e instanceof Exception) {
-                    return response()->json([
-                        'fault' => [
-                            'code' => 500,
-                            'message' => 'Произошла непредвиденная ошибка',
-                            'errors' => $e->getMessage(),
-                        ]
-                    ],500);
-                }
                 }
             }
         });

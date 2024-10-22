@@ -8,9 +8,6 @@
                     @foreach($items->popular->data as $topic)
                         <div class="col-lg-6 col-md-6">
                             <div class="ant106_post-latest-news-box text-center">
-                                <div class="ant106_post-latest-news-img">
-                                  <img src="/img/b-1.jpg" alt=""> {{--  Пока нет поля image --}}
-                                </div>
                                 <div class="ant106_post-latest-news-content">
                                     <h3><a href="{{ route('topics.get.one', $topic->id) }}">{{ $topic->name }}</a></h3>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($topic->created_at) }}</span>
