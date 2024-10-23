@@ -37,8 +37,8 @@ Route::prefix('/blog')->middleware(ApiOrViewGetRespond::class)->group(function (
     Route::get("/{topic}", [ThemeController::class, 'index'])->name('topics.get.one');
 });
 
-Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(function () {
-    Route::post('/{topic}', [CommentController::class, 'left'])->name('comments.left')->middleware(AuthCheckMiddleware::class);
+Route::prefix('/comments')->middleware([AuthCheckMiddleware::class, ApiOrViewPostRespond::class])->group(function () {
+    Route::post('/{topic}', [CommentController::class, 'left'])->name('comments.left');
     Route::delete('/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
     Route::put('/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::patch('/{comment}', [CommentController::class, 'update'])->name('comments.update');
@@ -46,7 +46,7 @@ Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(funct
 
 Route::get('/messenger/{receiver}', [MessengerController::class, 'getListOfUsers'])->middleware([AuthCheckMiddleware::class, ApiOrViewGetRespond::class,])->name('messenger');
 
-Route::prefix('/messages')->middleware(ApiOrViewPostRespond::class)->group(function () {
+Route::prefix('/messages')->middleware([AuthCheckMiddleware::class, ApiOrViewPostRespond::class])->group(function () {
     Route::post('/{receiver}', [MessengerController::class, 'send'])->name('messages.left');
     Route::delete('/{message}', [MessengerController::class, 'delete'])->name('messages.delete');
     Route::put('/{message}', [MessengerController::class, 'update'])->name('messages.update');
@@ -55,7 +55,7 @@ Route::prefix('/messages')->middleware(ApiOrViewPostRespond::class)->group(funct
 
 Route::get('/notifications', [NotificationController::class, 'getList'])->name('notifications.list')->middleware(AuthCheckMiddleware::class, ApiOrViewGetRespond::class);
 
-Route::prefix('/answers')->middleware(ApiOrViewPostRespond::class)->group(function () {
+Route::prefix('/answers')->middleware([AuthCheckMiddleware::class, ApiOrViewPostRespond::class])->group(function () {
     Route::post('/{comment}', [AnswerController::class, 'create'])->name('answers.create');
     Route::delete('/{answer}', [AnswerController::class, 'delete'])->name('answers.delete');
     Route::put('/{answer}', [AnswerController::class, 'update'])->name('answers.update');

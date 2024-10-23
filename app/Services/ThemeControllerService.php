@@ -16,6 +16,7 @@ class ThemeControllerService
     {
         $comments = Comment::where('theme_id', $topic->id)
             ->withAnswers()
+            ->onlyApproved()
             ->withThemeAndUser()
             ->orderBy('created_at', 'desc')
             ->paginate(6)

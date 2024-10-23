@@ -50,13 +50,8 @@ class ThemeController
     */
     public function search(Request $request, ThemeRepositories $repository, ThemeControllerService $service): array
     {
-        $topics = Cache::remember('latest_topics', 3600, function () use ($service, $request) {
-            return $service->search($request->q);
-        });
-
-        $latestTopics = Cache::remember('latest_topics', 3600, function () use ($repository) {
-            return $repository->getLatestList();
-        });
+        $topics = $service->search($request->q);
+        $latestTopics = $repository->getLatestList();
 
         return [
             'items' => [
@@ -75,7 +70,7 @@ class ThemeController
             return $repository->getOne($topic);
         });
 
-        $comments = Cache::remember("sort_comments_{$topic->id}", 3600, function () use ($topic, $service, $request) {
+        $comments = Cache::remember("comments_{$topic->id}", 3600, function () use ($service, $topic, $request) {
             return $service->sort($topic, $request->by);
         });
 
