@@ -8,6 +8,7 @@ use App\Http\Controllers\TopicController;
 use App\Http\Middleware\ApiOrViewGetRespond;
 use App\Http\Middleware\ApiOrViewPostRespond;
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\AuthCheckMiddleware;
 use App\Http\Middleware\AuthRespond;
 use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\NotificationController;
@@ -39,13 +40,13 @@ Route::prefix('/forum')->middleware(ApiOrViewGetRespond::class)->group(function 
 });
 
 Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(function () {
-    Route::post('/{topic}', [CommentController::class, 'left'])->name('comments.left');
+    Route::post('/{topic}', [CommentController::class, 'left'])->name('comments.left')->middleware(AuthCheckMiddleware::class);
     Route::delete('/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
     Route::put('/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::patch('/{comment}', [CommentController::class, 'update'])->name('comments.update');
 });
 
-Route::get('/messenger/{receiver}', [MessengerController::class, 'getListOfUsers'])->middleware(ApiOrViewGetRespond::class)->name('messenger');
+Route::get('/messenger/{receiver}', [MessengerController::class, 'getListOfUsers'])->middleware([AuthCheckMiddleware::class, ApiOrViewGetRespond::class,])->name('messenger');
 
 Route::prefix('/messages')->middleware(ApiOrViewPostRespond::class)->group(function () {
     Route::post('/{receiver}', [MessengerController::class, 'send'])->name('messages.left');
@@ -54,7 +55,7 @@ Route::prefix('/messages')->middleware(ApiOrViewPostRespond::class)->group(funct
     Route::patch('/{message}', [MessengerController::class, 'update'])->name('messages.update');
 });
 
-Route::get('/notifications', [NotificationController::class, 'getList'])->name('notifications.list')->middleware(ApiOrViewGetRespond::class);
+Route::get('/notifications', [NotificationController::class, 'getList'])->name('notifications.list')->middleware(AuthCheckMiddleware::class, ApiOrViewGetRespond::class);
 
 Route::prefix('/answers')->middleware(ApiOrViewPostRespond::class)->group(function () {
     Route::post('/{topic}/{comment}', [AnswerController::class, 'create'])->name('answers.create');
