@@ -15,12 +15,12 @@ class ApiOrViewPostRespond
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
-
         if ($request->wantsJson() || $request->is('api/*')) {
-            // Запрос для API
+            // Запрос для Api
             return response()->json($response->getData());
         } else {
-            return redirect()->back()->with('success', 'Комментарий создан успешно!');
+            // Запрос для Web
+            return redirect()->back()->with('success');
         }
     }
 }

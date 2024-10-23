@@ -22,6 +22,7 @@ class AnswerFactory extends Factory
         return [
             'comment_id' => Comment::factory(),
             'user_id' => User::factory(),
+            'content' => $this->faker->paragraph(),
             'created_at' => now(),
             'updated_at' => now(),
         ];

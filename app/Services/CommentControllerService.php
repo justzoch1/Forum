@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Comment;
 use App\Models\Theme;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Validator;
 
@@ -13,8 +14,9 @@ class CommentControllerService
     {
         $comments = Comment::where('theme_id', $topic->id)
             ->withAnswers()
-            ->onlyApproved()
             ->withThemeAndUser()
+            ->onlyApproved()
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return [
@@ -31,6 +33,7 @@ class CommentControllerService
             ->onlyApproved()
             ->get();
 
+        Log::info($comments);
         return [
             'count' => count($comments),
             'comments' => $comments
@@ -58,23 +61,23 @@ class CommentControllerService
         ];
     }
 
-    public function createFromRequest(array $data, Theme $topic): Comment
+    public function createFromRequest(array $data, Theme $topic, User $user): Comment
     {
-        $theme = Theme::find($topic->id);
-
-        if (!$theme) {
-            throw new \Exception("Тема с таким id $topic->id не найдена");
-        }
-
         $comment = Comment::create(array_merge($data, [
-            'theme_id' => $topic->id
+            'theme_id' => $topic->id,
+            'user_id' => $user->id
         ]));
+
+        Log::info($comment);
+
         return $comment;
     }
 
     public function updateFromRequest(Comment $comment, array $data): Comment
     {
         $comment->update($data);
+        Log::info($comment);
+
         return $comment;
     }
 
