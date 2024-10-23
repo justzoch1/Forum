@@ -38,9 +38,18 @@ class Comment extends Model
     {
         $query->with(['answers' => function ($query) {
             $query->join('comments', 'comments.id', '=', 'answers.comment_id')
-                ->join('users', 'users.id', '=', 'answers.user_id')
+                ->join('users as answer_users', 'answer_users.id', '=', 'answers.user_id')
+                ->join('users as comment_users', 'comment_users.id', '=', 'comments.user_id')
                 ->join('themes as answer_themes', 'answer_themes.id', '=', 'comments.theme_id')
-                ->select(['answers.*', 'users.name as user_name', 'answer_themes.name as theme_name', 'users.email as user_email', 'comments.last_updated as last_updated'])
+                ->select([
+                    'answers.*',
+                    'answer_users.name as answer_author_name',
+                    'answer_users.email as answer_author_email',
+                    'answers.user_id as answer_author_id',
+                    'comment_users.name as comment_author_name',
+                    'comment_users.email as comment_author_name',
+                    'comment_users.id as comment_author_id',
+                ])
                 ->orderBy('created_at', 'asc');
         }]);
     }

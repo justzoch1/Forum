@@ -18,6 +18,11 @@ class Theme extends Model
         'image'
     ];
 
+    protected $hidden = [
+        'logo',
+        'image'
+    ];
+
     public function comments() {
         return $this->hasMany(Comment::class);
     }

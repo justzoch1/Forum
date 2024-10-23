@@ -17,21 +17,21 @@
                     <h3 class="ant106_post-inner-title">Еще записи</h3>
                     <div class="row text-center">
                         @foreach($items->next as $topic)
-                        <div class="col-md-6">
-                            <div class="ant106_post-latest-news-box">
-                                <div class="ant106_post-latest-news-content">
-                                    <h3><a href="{{ route('topics.get.one', $topic->id) }}">{{ $topic->name }}</a></h3>
-                                    <span class="ant106_post-date">{{ \Carbon\Carbon::parse($topic->created_at ) }}$</span>
-                                    <p>{{ $topic->description }}</p>
-                                    <ul class="ant106_post-blog-statistics">
-                                        <li><i class="fas fa-comments"></i>{{ $topic->comments_count }}</li>
-                                    </ul>
-                                    <div class="ant106_post-news-btn">
-                                        <a href="{{ route('topics.get.one', $topic->id) }}" class="ant106_post-theme-btn">Читать далее</a>
+                            <div class="col-md-6">
+                                <div class="ant106_post-latest-news-box">
+                                    <div class="ant106_post-latest-news-content">
+                                        <h3><a href="{{ route('topics.get.one', $topic->id) }}">{{ $topic->name }}</a></h3>
+                                        <span class="ant106_post-date">{{ \Carbon\Carbon::parse($topic->created_at ) }}</span>
+                                        <p>{{ $topic->description }}</p>
+                                        <ul class="ant106_post-blog-statistics">
+                                            <li><i class="fas fa-comments"></i>{{ $topic->comments_count }}</li>
+                                        </ul>
+                                        <div class="ant106_post-news-btn">
+                                            <a href="{{ route('topics.get.one', $topic->id) }}" class="ant106_post-theme-btn">Читать далее</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         @endforeach
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                         @foreach ($comment->answers as $answer)
                             <div class="ant106_post-comment-item ant106_post-replay-comment">
                                 <div class="ant106_post-comment-content">
-                                    <h6>От: <a href="{{ route('messenger', $answer->user_id )}}" class="text-dark">{{ $answer->user_name }}</a> Кому: </h6>
+                                    <h6>От: <a href="{{ route('messenger', $answer->answer_author_id )}}" class="text-dark">{{ $answer->answer_author_name }}</a> Кому: <a href="{{ route('messenger', $answer->comment_author_id )}}" class="text-dark">{{ $answer->comment_author_name }}</a></h6>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($answer->created_at)->diffForHumans() }}</span>
                                     <p>{{ $answer->content }}</p>
                                 </div>
