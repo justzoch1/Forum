@@ -4,7 +4,7 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TopicController;
+use App\Http\Controllers\IndexController;
 use App\Http\Middleware\ApiOrViewGetRespond;
 use App\Http\Middleware\ApiOrViewPostRespond;
 use App\Http\Controllers\AuthController;
@@ -12,15 +12,16 @@ use App\Http\Middleware\AuthCheckMiddleware;
 use App\Http\Middleware\AuthRespond;
 use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ThemeController;
 
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
-    return \route('topics.list');
+    return redirect()->route('blog.index');
 });
 
 Route::get('/dashboard', function () {
-    return \route('topics.list');
+     return redirect()->route('blog.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -29,14 +30,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/', [TopicController::class, 'getList'])->name('topics.list')->middleware(ApiOrViewGetRespond::class);
-
-Route::prefix('/forum')->middleware(ApiOrViewGetRespond::class)->group(function () {
-    Route::prefix('/{topic}/comments')->group(function () {
-        Route::get('/', [CommentController::class, 'getListOfTopic'])->name('comments.list');
-        Route::get("/search", [ CommentController::class, 'search'])->name('topics.comments.search');
-        Route::get("/sort", [ CommentController::class, 'sort'])->name('topics.comments.sort');
-    });
+Route::prefix('/blog')->middleware(ApiOrViewGetRespond::class)->group(function () {
+    Route::get('/', [IndexController::class, 'index'])->name('blog.index')->middleware(ApiOrViewGetRespond::class);
+    Route::get("/{topic}/sort", [ ThemeController::class, 'sort'])->name('topics.comments.sort');
+    Route::get("/search", [ IndexController::class, 'search'])->name('topics.search');
+    Route::get("/{topic}", [ThemeController::class, 'index'])->name('topics.get.one');
 });
 
 Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(function () {

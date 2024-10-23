@@ -4,34 +4,29 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TopicController;
+use App\Http\Controllers\IndexController;
 use App\Http\Middleware\ApiOrViewGetRespond;
 use App\Http\Middleware\ApiOrViewPostRespond;
-use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AuthRespond;
 use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedTokenController;
+use App\Http\Controllers\ThemeController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/', [TopicController::class, 'getList'])->name('api.topics.list')->middleware(ApiOrViewGetRespond::class);
-
-Route::prefix('/auth')->middleware(AuthRespond::class)->group(function() {
-    Route::post('/register', [RegisteredUserController::class, 'storeWithToken'])->name('api.auth.register');
-    Route::post('/login', [AuthenticatedTokenController::class, 'token'])->name('api.auth.login');
+Route::prefix('/blog')->middleware(ApiOrViewGetRespond::class)->group(function () {
+    Route::get('/', [IndexController::class, 'index'])->name('api.blog.index')->middleware(ApiOrViewGetRespond::class);
+    Route::get("/search", [ IndexController::class, 'search'])->name('api.topics.search');
+    Route::get("/sort", [CommentController::class, 'sort'])->name('api.topics.comments.sort');
+    Route::get("/{topic}", [ThemeController::class, 'index'])->name('api.topics.get.one');
 });
 
-Route::prefix('/forum')->middleware(ApiOrViewGetRespond::class)->group(function () {
-    Route::prefix('/{topic}/comments')->group(function () {
-        Route::get('/', [CommentController::class, 'getListOfTopic'])->name('api.comments.list');
-        Route::get("/search", [ CommentController::class, 'search'])->name('api.topics.comments.search');
-        Route::get("/sort", [ CommentController::class, 'sort'])->name('api.topics.comments.sort');
-    });
-});
+Route::post('/register', [RegisteredUserController::class, 'storeWithToken'])->name('api.auth.register');
+Route::post('/login', [AuthenticatedTokenController::class, 'token'])->name('api.auth.login');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(function () {

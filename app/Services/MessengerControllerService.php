@@ -22,6 +22,7 @@ class MessengerControllerService
         ->withSenderAndReceiver()
         ->get();
         Log::info(['сообщения' => $messages]);
+
         return [
             'count' => count($messages),
             'messages' => $messages

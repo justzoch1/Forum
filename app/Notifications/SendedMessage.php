@@ -52,7 +52,8 @@ class SendedMessage extends Notification
     {
         Log::info($this->sender);
         return [
-            'Вам было отправлено сообщение от пользователя ' . $this->sender->name
+            'message' => 'Вам было отправлено сообщение от пользователя ' . $this->sender->name,
+            'sender_id' => $this->sender->id
         ];
     }
 }
