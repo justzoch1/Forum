@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Answer;
 use App\Models\Comment;
 use App\Models\Theme;
+use App\Models\User;
 use App\Services\AnswerControllerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,10 +19,10 @@ class AnswerController extends Controller
     /*
     * Оставить ответ
     */
-    public function create(Comment $comment, Request $request, AnswerControllerService $service): array
+    public function create(Comment $comment, User $receiver, Request $request, AnswerControllerService $service): array
     {
         Gate::authorize('create', Answer::class);
-        $answer = $service->createFromRequest($request->all(), $comment, Auth::user());
+        $answer = $service->createFromRequest($request->all(), $comment, $receiver, Auth::user());
 
         Cache::forget("comments_{$comment->theme_id}");
         return [

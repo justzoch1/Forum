@@ -32,7 +32,8 @@ class MessengerController
         Log::info(['Отправитель - ' => $sender->id, 'Получатель' => $receiver->id]);
 
         return [
-            'items' => $message
+            'items' => $message,
+            'receiver' => $receiver
         ];
     }
 

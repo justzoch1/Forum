@@ -76,7 +76,7 @@
                                 <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $comment->id }}')">Ответить</a>
                                 @can('create', App\Models\Comment::class)
                                     <div id="reply-form-{{ $comment->id }}" class="reply-form mb-3" style="display: none;">
-                                        <form method="POST" action="{{ route('answers.create',$comment->id) }}">
+                                        <form method="POST" action="{{ route('answers.create', [ $comment->id, $comment->user_id])}}">
                                             @csrf
                                             <textarea name="content" class="form-control" rows="3" placeholder="Ваш ответ..."></textarea>
                                             <button type="submit" class="btn btn-primary mt-2">Отправить</button>
@@ -88,9 +88,19 @@
                         @foreach ($comment->answers as $answer)
                             <div class="ant106_post-comment-item ant106_post-replay-comment">
                                 <div class="ant106_post-comment-content">
-                                    <h6>От: <a href="{{ route('messenger', $answer->answer_author_id )}}" class="text-dark">{{ $answer->answer_author_name }}</a> Кому: <a href="{{ route('messenger', $answer->comment_author_id )}}" class="text-dark">{{ $answer->comment_author_name }}</a></h6>
+                                    <h6>От: <a href="{{ route('messenger', $answer->author_id )}}" class="text-dark">{{ $answer->author_name }}</a> Кому: <a href="{{ route('messenger', $answer->receiver_id )}}" class="text-dark">{{ $answer->receiver_name }}</a></h6>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($answer->created_at)->diffForHumans() }}</span>
                                     <p>{{ $answer->content }}</p>
+                                    <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $answer->id }}')">Ответить</a>
+                                    @can('create', App\Models\Answer::class)
+                                        <div id="reply-form-{{ $answer->id }}" class="reply-form mb-3" style="display: none;">
+                                            <form method="POST" action="{{ route('answers.create', [$comment->id, $answer->user_id] ) }}">
+                                                @csrf
+                                                <textarea name="content" class="form-control" rows="3" placeholder="Ваш ответ..."></textarea>
+                                                <button type="submit" class="btn btn-primary mt-2">Отправить</button>
+                                            </form>
+                                        </div>
+                                    @endcan
                                 </div>
                                 @auth
                                     @if(auth()->user()->id == $answer->user_id)

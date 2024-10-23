@@ -21,7 +21,7 @@ class ThemeControllerService
             ->orderBy('created_at', 'desc')
             ->paginate(6)
             ->collect();
-
+//        Log::info(['комментарии' => $comments]);
         return $comments;
     }
 

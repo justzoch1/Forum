@@ -4,7 +4,7 @@
     <div class="container mt-5">
         @if($items->count < 1)
             <div class="alert alert-info" role="alert">
-                У вас пока нет сообщений с этим пользователем. Напишите первым!
+                У вас пока нет сообщений с {{ $receiver->name }}. Напишите первым!
             </div>
         @else
             <div class="list-group">
