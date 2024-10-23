@@ -7,7 +7,10 @@ use App\Repositories\ThemeRepositories;
 use App\Services\CommentControllerService;
 use App\Services\IndexControllerService;
 use App\Services\ThemeControllerService;
+use Illuminate\Cache\Events\CacheHit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class ThemeController
 {
@@ -16,10 +19,21 @@ class ThemeController
      */
     public function index(Theme $topic, ThemeRepositories $repository, ThemeControllerService $service): array
     {
-        $topic = $repository->getOne($topic);
-        $comments = $service->getCommentsListOfTopic($topic);
-        $latestTopics = $repository->getLatestList();
-        $nextTopics = $service->getNextTopic();
+        $topic = Cache::remember("topic_{$topic->id}", 3600, function () use ($repository, $topic) {
+            return $repository->getOne($topic);
+        });
+
+        $comments = Cache::remember("comments_{$topic->id}", 3600, function () use ($service, $topic) {
+            return $service->getCommentsListOfTopic($topic);
+        });
+
+        $latestTopics = Cache::remember('latest_topics', 3600, function () use ($repository) {
+            return $repository->getLatestList();
+        });
+
+        $nextTopics = Cache::remember('popular_topics', 3600, function () use ($service, $topic) {
+            return $service->getNextTopic();
+        });
 
         return [
             'items' => [
@@ -36,12 +50,17 @@ class ThemeController
     */
     public function search(Request $request, ThemeRepositories $repository, ThemeControllerService $service): array
     {
-        $topics = $service->search($request->q);
-        $latestThemes = $repository->getLatestList();
+        $topics = Cache::remember('latest_topics', 3600, function () use ($service, $request) {
+            return $service->search($request->q);
+        });
+
+        $latestTopics = Cache::remember('latest_topics', 3600, function () use ($repository) {
+            return $repository->getLatestList();
+        });
 
         return [
             'items' => [
-                'latest' => $latestThemes,
+                'latest' => $latestTopics,
                 'popular' => $topics,
             ]
         ];
@@ -52,10 +71,21 @@ class ThemeController
     */
     public function sort(Theme $topic, Request $request, ThemeRepositories $repository, ThemeControllerService $service): array
     {
-        $comments = $service->sort($topic, $request->by);
-        $topic = $repository->getOne($topic);
-        $latestTopics = $repository->getLatestList();
-        $nextTopics = $service->getNextTopic();
+        $topic = Cache::remember("topic_{$topic->id}", 3600, function () use ($repository, $topic) {
+            return $repository->getOne($topic);
+        });
+
+        $comments = Cache::remember("sort_comments_{$topic->id}", 3600, function () use ($topic, $service, $request) {
+            return $service->sort($topic, $request->by);
+        });
+
+        $latestTopics = Cache::remember('latest_topics', 3600, function () use ($repository) {
+            return $repository->getLatestList();
+        });
+
+        $nextTopics = Cache::remember('popular_topics', 3600, function () use ($service, $topic) {
+            return $service->getNextTopic();
+        });
 
         return [
             'items' => [

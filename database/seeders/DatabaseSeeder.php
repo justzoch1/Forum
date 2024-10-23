@@ -19,19 +19,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'id' => 0,
-            'name' => 'Anonim',
-            'email' => 'anonim@example.org',
-            'email_verified_at' => now(),
-            'password' => 'password',
-            'remember_token' => Str::random(10),
-        ]);
+//        User::create([
+//            'id' => 0,
+//            'name' => 'Anonim',
+//            'email' => 'anonim@example.org',
+//            'email_verified_at' => now(),
+//            'password' => 'password',
+//            'remember_token' => Str::random(10),
+//        ]);
 
-//         User::factory(12)->create();
-//         Message::factory(500)->create();
-//         Theme::factory(20)->create();
-//         Comment::factory(200)->create();
-//         Answer::factory(500)->create();
+         User::factory(12)->create();
+         Message::factory(500)->create();
+         Theme::factory(20)->create();
+         Comment::factory(200)->create();
+         Answer::factory(500)->create();
     }
 }

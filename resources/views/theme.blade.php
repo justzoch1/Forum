@@ -55,10 +55,26 @@
                                 <h6><a href="{{ route('messenger', $comment->user_id )}}" class="text-dark">{{ $comment->user_name }}</a></h6>
                                 <span class="ant106_post-date">{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</span>
                                 <p>{{ $comment->content }}</p>
+                                @if(auth()->user()->id == $comment->user_id)
+                                    <form action="{{ route('comments.delete', $comment->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Удалить комментарий</button>
+                                    </form>
+                                    <form action="{{ route('comments.update', $comment->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="form-group">
+                                            <label for="content">Контент</label>
+                                            <textarea name="content" id="content" rows="3" class="form-control" required>{{ $comment->content }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Обновить комментарий</button>
+                                    </form>
+                                @endif
                                 <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $comment->id }}')">Ответить</a>
                                 @can('create', App\Models\Comment::class)
                                     <div id="reply-form-{{ $comment->id }}" class="reply-form mb-3" style="display: none;">
-                                        <form method="POST" action="{{ route('answers.create',[$comment->theme_id, $comment->id]) }}">
+                                        <form method="POST" action="{{ route('answers.create',$comment->id) }}">
                                             @csrf
                                             <textarea name="content" class="form-control" rows="3" placeholder="Ваш ответ..."></textarea>
                                             <button type="submit" class="btn btn-primary mt-2">Отправить</button>
@@ -73,7 +89,18 @@
                                     <h6>От: <a href="{{ route('messenger', $answer->answer_author_id )}}" class="text-dark">{{ $answer->answer_author_name }}</a> Кому: <a href="{{ route('messenger', $answer->comment_author_id )}}" class="text-dark">{{ $answer->comment_author_name }}</a></h6>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($answer->created_at)->diffForHumans() }}</span>
                                     <p>{{ $answer->content }}</p>
+                                    <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $answer->id }}')">Ответить</a>
+                                    @can('create', App\Models\Answer::class)
+                                        <div id="reply-form-{{ $answer->id }}" class="reply-form mb-3" style="display: none;">
+                                            <form method="POST" action="{{ route('answers.create', $answer->comment_id) }}">
+                                                @csrf
+                                                <textarea name="content" class="form-control" rows="3" placeholder="Ваш ответ..."></textarea>
+                                                <button type="submit" class="btn btn-primary mt-2">Отправить</button>
+                                            </form>
+                                        </div>
+                                    @endcan
                                 </div>
+
                                 @if(auth()->user()->id == $answer->user_id)
                                     <form action="{{ route('answers.delete', $answer->id) }}" method="POST">
                                         @csrf

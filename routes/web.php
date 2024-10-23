@@ -56,7 +56,7 @@ Route::prefix('/messages')->middleware(ApiOrViewPostRespond::class)->group(funct
 Route::get('/notifications', [NotificationController::class, 'getList'])->name('notifications.list')->middleware(AuthCheckMiddleware::class, ApiOrViewGetRespond::class);
 
 Route::prefix('/answers')->middleware(ApiOrViewPostRespond::class)->group(function () {
-    Route::post('/{topic}/{comment}', [AnswerController::class, 'create'])->name('answers.create');
+    Route::post('/{comment}', [AnswerController::class, 'create'])->name('answers.create');
     Route::delete('/{answer}', [AnswerController::class, 'delete'])->name('answers.delete');
     Route::put('/{answer}', [AnswerController::class, 'update'])->name('answers.update');
     Route::patch('/{answer}', [AnswerController::class, 'update'])->name('answers.update');

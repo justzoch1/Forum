@@ -47,7 +47,7 @@ class Comment extends Model
                     'answer_users.email as answer_author_email',
                     'answers.user_id as answer_author_id',
                     'comment_users.name as comment_author_name',
-                    'comment_users.email as comment_author_name',
+                    'comment_users.email as comment_author_email',
                     'comment_users.id as comment_author_id',
                 ])
                 ->orderBy('created_at', 'asc');
