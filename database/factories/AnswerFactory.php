@@ -18,9 +18,8 @@ class AnswerFactory extends Factory
      */
     public function definition(): array
     {
-
         return [
-            'comment_id' => Comment::factory(),
+            'comment_id' => Comment::all()->random(),
             'user_id' => User::factory(),
             'content' => $this->faker->paragraph(),
             'created_at' => now(),

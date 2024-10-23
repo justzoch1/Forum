@@ -30,8 +30,8 @@ class MessengerController
         $sender = $this->user;
         $message = $service->getListOfUser($sender, $receiver);
         Log::info(['Отправитель - ' => $sender->id, 'Получатель' => $receiver->id]);
+
         return [
-            'count' => count($message),
             'items' => $message
         ];
     }

@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Psy\Exception\FatalErrorException;
+use Symfony\Component\ErrorHandler\Error\FatalError;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -74,13 +76,19 @@ class Handler extends ExceptionHandler
                         ]
                     ], 422);
                 } elseif ($e instanceof Exception) {
-                    return response()->json([
+                    return response()->view('errors', [
                         'fault' => [
                             'code' => 500,
-                            'message' => 'Произошла непредвиденная ошибка',
-                            'errors' => $e->getMessage(),
+                            'message' => 'Произошла непредвиденная ошибка: ' . $e->getMessage(),
                         ]
-                    ],500);
+                    ], 500);
+                } elseif ($e instanceof FatalError || $e instanceof FatalErrorException) {
+                    return response()->view('errors', [
+                        'fault' => [
+                            'code' => 500,
+                            'message' => 'Произошла фатальная ошибка: ' . $e->getMessage(),
+                        ]
+                    ], 500);
                 }
             } else {
                 if ($e instanceof NotFoundHttpException) {
@@ -124,8 +132,14 @@ class Handler extends ExceptionHandler
                     return response()->view('errors', [
                         'fault' => [
                             'code' => 500,
-                            'message' => 'Произошла непредвиденная ошибка',
-                            'errors' => $e->getMessage(),
+                            'message' => 'Произошла непредвиденная ошибка: ' . $e->getMessage(),
+                        ]
+                    ], 500);
+                } elseif ($e instanceof FatalError || $e instanceof FatalErrorException) {
+                    return response()->view('errors', [
+                        'fault' => [
+                            'code' => 500,
+                            'message' => 'Произошла фатальная ошибка: ' . $e->getMessage(),
                         ]
                     ], 500);
                 }

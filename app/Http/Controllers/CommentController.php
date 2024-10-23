@@ -70,30 +70,4 @@ class CommentController extends Controller
             'status' => 'success',
         ];
     }
-
-    /*
-    * Искать по ключевым словами и фразам контента
-    */
-    public function search(Theme $topic, Request $request, CommentControllerService $service): array
-    {
-        $comments = $service->search($topic, $request->q);
-        return [
-            'status' => 'success',
-            'items' => $comments,
-            'topic' => $topic
-        ];
-    }
-
-    /*
-    * Сортировать по популярности и дате загрузки
-    */
-    public function sort(Theme $topic, Request $request, CommentControllerService $service): array
-    {
-        $comments = $service->sort($topic, $request->by);
-        return [
-            'status' => 'success',
-            'items' => $comments,
-            'topic' => $topic
-        ];
-    }
 }
