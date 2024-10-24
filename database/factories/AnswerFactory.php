@@ -24,6 +24,7 @@ class AnswerFactory extends Factory
             'content' => $this->faker->paragraph(),
             'created_at' => now(),
             'updated_at' => now(),
+            'receiver_id' => User::all()->random(),
         ];
     }
 }

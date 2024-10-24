@@ -16,12 +16,12 @@ class ThemeControllerService
     {
         $comments = Comment::where('theme_id', $topic->id)
             ->withAnswers()
-            ->withThemeAndUser()
             ->onlyApproved()
+            ->withThemeAndUser()
             ->orderBy('created_at', 'desc')
             ->paginate(6)
             ->collect();
-
+//        Log::info(['комментарии' => $comments]);
         return $comments;
     }
 

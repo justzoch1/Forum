@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'getList'])->name('api.notifications.list')->middleware(ApiOrViewGetRespond::class);
 
     Route::prefix('/answers')->middleware(ApiOrViewPostRespond::class)->group(function () {
-        Route::post('/{topic}/{comment}', [AnswerController::class, 'create'])->name('api.answer.create');
+        Route::post('/{comment}/{receiver}', [AnswerController::class, 'create'])->name('answers.create');
         Route::delete('/{answer}', [AnswerController::class, 'delete'])->name('api.answer.delete');
         Route::put('/{answer}', [AnswerController::class, 'update'])->name('api.answer.update');
         Route::patch('/{answer}', [AnswerController::class, 'update'])->name('api.answer.update');
