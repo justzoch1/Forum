@@ -73,8 +73,8 @@
                                         </form>
                                     @endif
                                 @endauth
-                                <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $comment->id }}')">Ответить</a>
                                 @can('create', App\Models\Comment::class)
+                                    <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $comment->id }}')">Ответить</a>
                                     <div id="reply-form-{{ $comment->id }}" class="reply-form mb-3" style="display: none;">
                                         <form method="POST" action="{{ route('answers.create', [ $comment->id, $comment->user_id])}}">
                                             @csrf
@@ -91,8 +91,8 @@
                                     <h6>От: <a href="{{ route('messenger', $answer->author_id )}}" class="text-dark">{{ $answer->author_name }}</a> Кому: <a href="{{ route('messenger', $answer->receiver_id )}}" class="text-dark">{{ $answer->receiver_name }}</a></h6>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($answer->created_at)->diffForHumans() }}</span>
                                     <p>{{ $answer->content }}</p>
-                                    <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $answer->id }}')">Ответить</a>
                                     @can('create', App\Models\Answer::class)
+                                        <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $answer->id }}')">Ответить</a>
                                         <div id="reply-form-{{ $answer->id }}" class="reply-form mb-3" style="display: none;">
                                             <form method="POST" action="{{ route('answers.create', [$comment->id, $answer->user_id] ) }}">
                                                 @csrf
@@ -149,9 +149,12 @@
                 <form id="ant106_post-comment-form" class="ant106_post-comment-form" action="{{ route('comments.left', $items->topic->id) }}" method="POST">
                     @csrf
                     @method('POST')
+                    <div class="captcha">
+                        {!! app('captcha')->render() !!}
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <textarea class="form-control" rows="7" placeholder="Сообщение..." required="" name="content" id="content" rows="3" class="form-control" required></textarea>
+                            <textarea class="form-control" rows="7" placeholder="Сообщение..." required name="content" id="content"></textarea>
                         </div>
                     </div>
                     <div class="col-md-4">

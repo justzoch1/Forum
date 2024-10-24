@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "240d5b3609aeca14c38f25df17df47fd",
+    "content-hash": "029aab4064eb40503c5d2fb129c9b1a4",
     "packages": [
         {
             "name": "brick/math",
@@ -576,6 +576,73 @@
                 }
             ],
             "time": "2023-10-12T05:21:21+00:00"
+        },
+        {
+            "name": "garbinmarcelo/invisible-recaptcha",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/garbinmarcelo/invisible-recaptcha.git",
+                "reference": "e9758f73b5a8672e1c4c3e57338b18dcdee3928c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/garbinmarcelo/invisible-recaptcha/zipball/e9758f73b5a8672e1c4c3e57338b18dcdee3928c",
+                "reference": "e9758f73b5a8672e1c4c3e57338b18dcdee3928c",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.2|^7.0",
+                "illuminate/support": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "illuminate/view": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "php": "^5.6.4 || ^7.0 || ^8.0 || ^8.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.0|^9.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "GarbinMarcelo\\InvisibleReCaptcha\\InvisibleReCaptchaServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GarbinMarcelo\\InvisibleReCaptcha\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Albert Chen",
+                    "homepage": "https://www.albert-chen.com"
+                },
+                {
+                    "name": "Marcelo Garbin",
+                    "homepage": "https://garbin.dev"
+                }
+            ],
+            "description": "Invisible reCAPTCHA For Laravel.",
+            "keywords": [
+                "captcha",
+                "invisible",
+                "invisible-recaptcha",
+                "laravel",
+                "laravel5",
+                "no-captcha",
+                "php",
+                "recaptcha"
+            ],
+            "support": {
+                "issues": "https://github.com/garbinmarcelo/invisible-recaptcha/issues",
+                "source": "https://github.com/garbinmarcelo/invisible-recaptcha/tree/1.0.0"
+            },
+            "time": "2024-10-20T14:04:28+00:00"
         },
         {
             "name": "graham-campbell/result-type",
