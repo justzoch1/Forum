@@ -46,6 +46,22 @@ class ThemeController
     }
 
     /*
+     * Получить следующие комментарии
+     */
+    public function getMoreComments(Request $request, Theme $topic, ThemeControllerService $service): array
+    {
+        $comments = $service->getCommentsListOfTopic($topic);
+
+        if ($request->ajax()) {
+            return view('theme', compact('comments'))->render();
+        }
+
+        return [
+            'more_comments' => $comments
+        ];
+    }
+
+    /*
     * Искать по ключевым словами и фразам
     */
     public function search(Request $request, ThemeRepositories $repository, ThemeControllerService $service): array

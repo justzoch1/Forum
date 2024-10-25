@@ -22,9 +22,9 @@
                             </div>
                         </div>
                     @endforeach
-                        <div class="col text-center">
-                            <a href="#" class="ant106_post-theme-btn" id="loadMoreBtn">Следующая страница</a>
-                        </div>
+                    <div class="col text-center">
+                        <a href="#" class="ant106_post-theme-btn" id="loadMoreBtn">Следующая страница</a>
+                    </div>
                 </div>
             </main>
 
@@ -50,5 +50,5 @@
     </div>
     <!-- Container /- -->
 </div>
-<script src="js/paginator.js"></script>
+
 @endsection

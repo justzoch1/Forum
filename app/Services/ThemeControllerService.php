@@ -12,16 +12,17 @@ use Illuminate\Support\Facades\Log;
 
 class ThemeControllerService
 {
-    public function getCommentsListOfTopic(Theme $topic): Collection
+    public function getCommentsListOfTopic(Theme $topic): LengthAwarePaginator
     {
         $comments = Comment::where('theme_id', $topic->id)
             ->withAnswers()
             ->onlyApproved()
             ->withThemeAndUser()
             ->orderBy('created_at', 'desc')
-            ->paginate(6)
-            ->collect();
-//        Log::info(['комментарии' => $comments]);
+            ->paginate(6);
+
+        // Log::info(['комментарии' => $comments]);
+
         return $comments;
     }
 
