@@ -8,6 +8,7 @@ use App\Services\CommentControllerService;
 use App\Services\IndexControllerService;
 use App\Services\ThemeControllerService;
 use Illuminate\Cache\Events\CacheHit;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -48,17 +49,11 @@ class ThemeController
     /*
      * Получить следующие комментарии
      */
-    public function getMoreComments(Request $request, Theme $topic, ThemeControllerService $service): array
+    public function getMoreComments(Request $request, Theme $topic, ThemeControllerService $service): JsonResponse
     {
         $comments = $service->getCommentsListOfTopic($topic);
 
-        if ($request->ajax()) {
-            return view('theme', compact('comments'))->render();
-        }
-
-        return [
-            'more_comments' => $comments
-        ];
+        return response()->json(['more_comments' => $comments]);
     }
 
     /*

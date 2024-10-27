@@ -27,6 +27,8 @@ Route::prefix('/blog')->group(function () {
     Route::get("/{topic}", [ThemeController::class, 'index'])->name('api.topics.get.one');
 });
 
+Route::get("/{topic}/more-comments", [ThemeController::class, 'getMoreComments'])->name('get.more.comments');
+
 Route::prefix('/oauth')->group(function () {
     Route::prefix('/yandex')->group(function () {
         Route::get('/redirect', [YandexOauthController::class, 'redirect'])->name('api.oauth.yandex.redirect');

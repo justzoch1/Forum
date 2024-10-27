@@ -44,8 +44,9 @@ Route::prefix('/blog')->middleware(ApiOrViewGetRespond::class)->group(function (
     Route::get("/{topic}/sort", [ ThemeController::class, 'sort'])->name('topics.comments.sort');
     Route::get("/search", [ IndexController::class, 'search'])->name('topics.search');
     Route::get("/{topic}", [ThemeController::class, 'index'])->name('topics.get.one');
-    Route::get("/{topic}/more-comments", [ThemeController::class, 'getMoreComments'])->name('get.more.comments');
 });
+
+Route::get("/{topic}/more-comments", [ThemeController::class, 'getMoreComments'])->name('get.more.comments');
 
 Route::prefix('/comments')->middleware([AuthCheckMiddleware::class, ApiOrViewPostRespond::class])->group(function () {
     Route::post('/{topic}', [CommentController::class, 'left'])->name('comments.left');

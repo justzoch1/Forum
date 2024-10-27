@@ -50,5 +50,5 @@
     </div>
     <!-- Container /- -->
 </div>
-
+<script src="/js/paginator.js"></script>
 @endsection

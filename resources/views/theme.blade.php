@@ -171,4 +171,5 @@
     </div>
     <!-- Container /- -->
 </div>
+<script src="/js/ajax_paginator.js"></script>
 @endsection
