@@ -11,12 +11,13 @@ use Illuminate\Validation\Validator;
 
 class AnswerControllerService
 {
-    public function createFromRequest(array $data, Theme $topic, Comment $comment, User $user): Answer
+    public function createFromRequest(array $data, Comment $comment, User $receiver, User $author): Answer
     {
         $answer = Answer::create(array_merge($data, [
-            'theme_id' => $topic->id,
+            'theme_id' => $comment->theme_id,
             'comment_id' => $comment->id,
-            'user_id' => $user->id,
+            'user_id' => $author->id,
+            'receiver_id' => $receiver->id
         ]));
 
         Log::info($answer);

@@ -55,10 +55,28 @@
                                 <h6><a href="{{ route('messenger', $comment->user_id )}}" class="text-dark">{{ $comment->user_name }}</a></h6>
                                 <span class="ant106_post-date">{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</span>
                                 <p>{{ $comment->content }}</p>
-                                <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $comment->id }}')">Ответить</a>
+                                @auth
+                                    @if(auth()->user()->id == $comment->user_id)
+                                        <form action="{{ route('comments.delete', $comment->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Удалить комментарий</button>
+                                        </form>
+                                        <form action="{{ route('comments.update', $comment->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="form-group">
+                                                <label for="content">Контент</label>
+                                                <textarea name="content" id="content" rows="3" class="form-control" required>{{ $comment->content }}</textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Обновить комментарий</button>
+                                        </form>
+                                    @endif
+                                @endauth
                                 @can('create', App\Models\Comment::class)
+                                    <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $comment->id }}')">Ответить</a>
                                     <div id="reply-form-{{ $comment->id }}" class="reply-form mb-3" style="display: none;">
-                                        <form method="POST" action="{{ route('answers.create',[$comment->theme_id, $comment->id]) }}">
+                                        <form method="POST" action="{{ route('answers.create', [ $comment->id, $comment->user_id])}}">
                                             @csrf
                                             <textarea name="content" class="form-control" rows="3" placeholder="Ваш ответ..."></textarea>
                                             <button type="submit" class="btn btn-primary mt-2">Отправить</button>
@@ -70,29 +88,47 @@
                         @foreach ($comment->answers as $answer)
                             <div class="ant106_post-comment-item ant106_post-replay-comment">
                                 <div class="ant106_post-comment-content">
-                                    <h6>От: <a href="{{ route('messenger', $answer->answer_author_id )}}" class="text-dark">{{ $answer->answer_author_name }}</a> Кому: <a href="{{ route('messenger', $answer->comment_author_id )}}" class="text-dark">{{ $answer->comment_author_name }}</a></h6>
+                                    <h6>От: <a href="{{ route('messenger', $answer->author_id )}}" class="text-dark">{{ $answer->author_name }}</a> Кому: <a href="{{ route('messenger', $answer->receiver_id )}}" class="text-dark">{{ $answer->receiver_name }}</a></h6>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($answer->created_at)->diffForHumans() }}</span>
                                     <p>{{ $answer->content }}</p>
-                                </div>
-                                @if(auth()->user()->id == $answer->user_id)
-                                    <form action="{{ route('answers.delete', $answer->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Удалить ответ</button>
-                                    </form>
-                                    <form action="{{ route('answers.update', $answer->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="form-group">
-                                            <label for="content">Контент</label>
-                                            <textarea name="content" id="content" rows="3" class="form-control" required>{{ $answer->content }}</textarea>
+                                    @can('create', App\Models\Answer::class)
+                                        <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $answer->id }}')">Ответить</a>
+                                        <div id="reply-form-{{ $answer->id }}" class="reply-form mb-3" style="display: none;">
+                                            <form method="POST" action="{{ route('answers.create', [$comment->id, $answer->user_id] ) }}">
+                                                @csrf
+                                                <textarea name="content" class="form-control" rows="3" placeholder="Ваш ответ..."></textarea>
+                                                <button type="submit" class="btn btn-primary mt-2">Отправить</button>
+                                            </form>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Обновить ответ</button>
-                                    </form>
-                                @endif
+                                    @endcan
+                                </div>
+                                @auth
+                                    @if(auth()->user()->id == $answer->user_id)
+                                        <form action="{{ route('answers.delete', $answer->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Удалить ответ</button>
+                                        </form>
+                                        <form action="{{ route('answers.update', $answer->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="form-group">
+                                                <label for="content">Контент</label>
+                                                <textarea name="content" id="content" rows="3" class="form-control" required>{{ $answer->content }}</textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Обновить ответ</button>
+                                        </form>
+                                    @endif
+                                @endauth
                             </div>
                         @endforeach
                     @endforeach
+
+                    @unless($items->topic->comments_count == count($items->comments))
+                    <div class="col text-center">
+                        <a href="" class="ant106_comments-theme-btn" id="loadMoreBtn" >Загрузить еще</a>
+                    </div>
+                    @endunless
                 </div>
             </main>
 
@@ -114,28 +150,29 @@
                     </div>
                 </div>
             </aside>
-
-            @can('create', App\Models\Comment::class)
-                <div class="ant106_post-comment-form col-md-8">
-                    <h3 class="ant106_post-inner-title"> Написать комментарий</h3>
-                    <form id="ant106_post-comment-form" class="ant106_post-comment-form" action="{{ route('comments.left', $items->topic->id) }}" method="POST">
-                        @csrf
-                        @method('POST')
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <textarea class="form-control" rows="7" placeholder="Сообщение..." required="" name="content" id="content" rows="3" class="form-control" required></textarea>
-                            </div>
+            <div class="ant106_post-comment-form col-md-8">
+                <h3 class="ant106_post-inner-title"> Оставить комментарий</h3>
+                <form id="ant106_post-comment-form" class="ant106_post-comment-form" action="{{ route('comments.left', $items->topic->id) }}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <div class="captcha">
+                        {!! app('captcha')->render() !!}
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <textarea class="form-control" rows="7" placeholder="Сообщение..." required name="content" id="content"></textarea>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <button class="ant106_post-theme-btn mt-2" type="submit">Отправить</button>
-                            </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <button id="add-more-comments-btn" class="ant106_post-theme-btn mt-2" type="submit">Отправить</button>
                         </div>
-                    </form>
-                </div>
-            @endcan
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <!-- Container /- -->
 </div>
+<script src="/js/paginator.js"></script>
 @endsection

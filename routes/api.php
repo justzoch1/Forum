@@ -13,16 +13,27 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedTokenController;
 use App\Http\Controllers\ThemeController;
+use App\Http\Controllers\Auth\YandexOauthController;
+use App\Http\Middleware\OauthMiddleware;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::prefix('/blog')->middleware(ApiOrViewGetRespond::class)->group(function () {
+Route::prefix('/blog')->group(function () {
     Route::get('/', [IndexController::class, 'index'])->name('api.blog.index')->middleware(ApiOrViewGetRespond::class);
     Route::get("/search", [ IndexController::class, 'search'])->name('api.topics.search');
     Route::get("/sort", [CommentController::class, 'sort'])->name('api.topics.comments.sort');
     Route::get("/{topic}", [ThemeController::class, 'index'])->name('api.topics.get.one');
+});
+
+Route::get("/{topic}/more-comments", [ThemeController::class, 'getMoreComments'])->name('get.more.comments');
+
+Route::prefix('/oauth')->group(function () {
+    Route::prefix('/yandex')->group(function () {
+        Route::get('/redirect', [YandexOauthController::class, 'redirect'])->name('api.oauth.yandex.redirect');
+        Route::get('/callback', [YandexOauthController::class, 'callback'])->name('api.oauth.yandex.callback');
+    });
 });
 
 Route::post('/register', [RegisteredUserController::class, 'storeWithToken'])->name('api.auth.register');
@@ -48,7 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'getList'])->name('api.notifications.list')->middleware(ApiOrViewGetRespond::class);
 
     Route::prefix('/answers')->middleware(ApiOrViewPostRespond::class)->group(function () {
-        Route::post('/{topic}/{comment}', [AnswerController::class, 'create'])->name('api.answer.create');
+        Route::post('/{comment}/{receiver}', [AnswerController::class, 'create'])->name('answers.create');
         Route::delete('/{answer}', [AnswerController::class, 'delete'])->name('api.answer.delete');
         Route::put('/{answer}', [AnswerController::class, 'update'])->name('api.answer.update');
         Route::patch('/{answer}', [AnswerController::class, 'update'])->name('api.answer.update');
