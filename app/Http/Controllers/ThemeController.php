@@ -18,15 +18,15 @@ class ThemeController
     /*
      * Получить данные для страницы(конкретную тему, комментарии к ней, интересные темы и последнии темы)
      */
-    public function index(Theme $topic, ThemeRepositories $repository, ThemeControllerService $service): array
+    public function index(Request $request, Theme $topic, ThemeRepositories $repository, ThemeControllerService $service): array
     {
+        $page = $request->page != null ? $request->page : 1;
+
         $topic = Cache::remember("topic_{$topic->id}", 3600, function () use ($repository, $topic) {
             return $repository->getOne($topic);
         });
 
-        $comments = Cache::remember("comments_{$topic->id}", 3600, function () use ($service, $topic) {
-            return $service->getCommentsListOfTopic($topic);
-        });
+        $comments = $service->getCommentsListOfTopic($topic, $page);
 
         $latestTopics = Cache::remember('latest_topics', 3600, function () use ($repository) {
             return $repository->getLatestList();
@@ -44,16 +44,6 @@ class ThemeController
                 'comments' => $comments,
             ]
         ];
-    }
-
-    /*
-     * Получить следующие комментарии
-     */
-    public function getMoreComments(Request $request, Theme $topic, ThemeControllerService $service): JsonResponse
-    {
-        $comments = $service->getCommentsListOfTopic($topic);
-
-        return response()->json(['more_comments' => $comments]);
     }
 
     /*

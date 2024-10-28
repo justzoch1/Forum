@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder
 
         //  User::factory(12)->create();
         //  Message::factory(500)->create();
-        //  Theme::factory(20)->create();
-         Comment::factory(200)->create();
-         Answer::factory(500)->create();
+        Theme::factory(20)->create();
+//         Comment::factory(2000)->create();
+//         Answer::factory(500)->create();
     }
 }

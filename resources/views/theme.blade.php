@@ -49,7 +49,7 @@
                 </div>
                 <div class="ant106_post-comments mb-4">
                     <h3 class="ant106_post-inner-title">Комментарии</h3>
-                    @foreach ($items->comments->data as $comment)
+                    @foreach ($items->comments as $comment)
                         <div class="ant106_post-comment-item">
                             <div class="ant106_post-comment-content">
                                 <h6><a href="{{ route('messenger', $comment->user_id )}}" class="text-dark">{{ $comment->user_name }}</a></h6>
@@ -124,7 +124,7 @@
                         @endforeach
                     @endforeach
                     <div class="col text-center">
-                        <a href="" class="ant106_comments-theme-btn" data-topic="{{ $items->topic->id }}" id="loadMoreCommentsBtn" >Загрузить еще</a>
+                        <a href="" class="ant106_comments-theme-btn" id="loadMoreBtn" >Загрузить еще</a>
                     </div>
                 </div>
             </main>
@@ -162,7 +162,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <button id="add-more-comments-bt"n class="ant106_post-theme-btn mt-2" type="submit">Отправить</button>
+                            <button id="add-more-comments-btn" class="ant106_post-theme-btn mt-2" type="submit">Отправить</button>
                         </div>
                     </div>
                 </form>
@@ -171,5 +171,5 @@
     </div>
     <!-- Container /- -->
 </div>
-<script src="/js/ajax_paginator.js"></script>
+<script src="/js/paginator.js"></script>
 @endsection

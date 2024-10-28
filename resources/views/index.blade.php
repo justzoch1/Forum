@@ -22,9 +22,11 @@
                             </div>
                         </div>
                     @endforeach
+                    @if(count($items->popular->data) > 1)
                     <div class="col text-center">
                         <a href="#" class="ant106_post-theme-btn" id="loadMoreBtn">Следующая страница</a>
                     </div>
+                    @endif
                 </div>
             </main>
 
