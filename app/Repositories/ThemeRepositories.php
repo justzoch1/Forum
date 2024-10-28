@@ -27,8 +27,12 @@ class ThemeRepositories
 
     public function getOne(Theme $topic): Theme
     {
-        $topic = Theme::withCount('comments')->withCommentsCount()->withUser()->findOrFail($topic->id);
-        Log::info($topic);
+        $topic = Theme::withUser()->findOrFail($topic->id);
+
+        $approvedCommentsCount = $topic->approvedCommentsCount();
+
+        $topic->setAttribute('comments_count', $approvedCommentsCount);
+
         return $topic;
     }
 }

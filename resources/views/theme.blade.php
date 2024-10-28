@@ -123,9 +123,12 @@
                             </div>
                         @endforeach
                     @endforeach
+
+                    @unless($items->topic->comments_count == count($items->comments))
                     <div class="col text-center">
                         <a href="" class="ant106_comments-theme-btn" id="loadMoreBtn" >Загрузить еще</a>
                     </div>
+                    @endunless
                 </div>
             </main>
 

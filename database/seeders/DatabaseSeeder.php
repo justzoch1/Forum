@@ -27,11 +27,10 @@ class DatabaseSeeder extends Seeder
 //            'password' => 'password',
 //            'remember_token' => Str::random(10),
 //        ]);
-
-        //  User::factory(12)->create();
-        //  Message::factory(500)->create();
-        Theme::factory(20)->create();
-//         Comment::factory(2000)->create();
-//         Answer::factory(500)->create();
+//
+//          User::factory(12)->create();
+//          Message::factory(500)->create();
+//         Theme::factory(200)->create();
+         Comment::factory(2000)->create();Answer::factory(500)->create();
     }
 }
