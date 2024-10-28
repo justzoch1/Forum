@@ -22,9 +22,11 @@
                             </div>
                         </div>
                     @endforeach
-                        <div class="col text-center">
-                            <a href="#" class="ant106_post-theme-btn" id="loadMoreBtn">Следующая страница</a>
-                        </div>
+                    @if(count($items->popular->data) > 1)
+                    <div class="col text-center">
+                        <a href="#" class="ant106_post-theme-btn" id="loadMoreBtn">Следующая страница</a>
+                    </div>
+                    @endif
                 </div>
             </main>
 
@@ -50,5 +52,5 @@
     </div>
     <!-- Container /- -->
 </div>
-<script src="js/paginator.js"></script>
+<script src="/js/paginator.js"></script>
 @endsection

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\CommentController;
+use App\Http\Middleware\OauthMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
@@ -13,6 +14,7 @@ use App\Http\Middleware\AuthRespond;
 use App\Http\Controllers\MessengerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ThemeController;
+use App\Http\Controllers\Auth\YandexOauthController;
 
 use App\Http\Controllers\ProfileController;
 
@@ -30,12 +32,21 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::prefix('/oauth')->group(function () {
+    Route::prefix('/yandex')->group(function () {
+        Route::get('/redirect', [YandexOauthController::class, 'redirect'])->name('oauth.yandex.redirect');
+        Route::get('/callback', [YandexOauthController::class, 'callback'])->name('oauth.yandex.callback');
+    });
+});
+
 Route::prefix('/blog')->middleware(ApiOrViewGetRespond::class)->group(function () {
     Route::get('/', [IndexController::class, 'index'])->name('blog.index')->middleware(ApiOrViewGetRespond::class);
     Route::get("/{topic}/sort", [ ThemeController::class, 'sort'])->name('topics.comments.sort');
     Route::get("/search", [ IndexController::class, 'search'])->name('topics.search');
     Route::get("/{topic}", [ThemeController::class, 'index'])->name('topics.get.one');
 });
+
+Route::get("/{topic}/more-comments", [ThemeController::class, 'getMoreComments'])->name('get.more.comments');
 
 Route::prefix('/comments')->middleware([AuthCheckMiddleware::class, ApiOrViewPostRespond::class])->group(function () {
     Route::post('/{topic}', [CommentController::class, 'left'])->name('comments.left');

@@ -30,4 +30,8 @@ class Theme extends Model
     public function scopeWithUser($query) {
         $query->join('users', 'themes.user_id', '=', 'users.id')->select('themes.*', 'users.name as user_name');
     }
+    public function scopeApprovedCommentsCount(): int
+    {
+        return $this->comments()->where('status', 'approved')->count();
+    }
 }

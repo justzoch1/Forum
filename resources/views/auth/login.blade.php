@@ -45,5 +45,8 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+        <div class="flex items-center justify-end mt-4">
+            <a href="{{ route("oauth.yandex.redirect") }}"> Войти через яндекс</a>
+        </div>
     </form>
 </x-guest-layout>
