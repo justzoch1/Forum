@@ -2,13 +2,13 @@
     <div>
         @auth
             <a class="btn btn-link me-4">{{ auth()->user()->name }}</a>
-            <a href="{{ route('blog.index') }}" class="btn btn-link">Блог</a>
             <a href="{{ route('notifications.list') }}" class="btn btn-link">Уведомления</a>
         @endauth
         @guest
             <a href="{{ route('login') }}" class="btn btn-link">Войти</a>
             <a href="{{ route('register') }}" class="btn btn-link">Зарегистрироваться</a>
         @endguest
+        <a href="{{ route('blog.index') }}" class="btn btn-link">Блог</a>
     </div>
     @auth
         <div class="ms-auto">
