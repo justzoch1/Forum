@@ -13,14 +13,7 @@ class Theme extends Model
         'name',
         'user_id',
         'description',
-        'logo',
         'preview',
-        'image'
-    ];
-
-    protected $hidden = [
-        'logo',
-        'image'
     ];
 
     public function comments() {

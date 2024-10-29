@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -35,7 +37,7 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->renderable(function (\Throwable $e, Request $request) {
-            if ($request->is('api/*')) {
+            if ($request->is('api/*') || $request->wantsJson()) {
                 if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
                     return response()->json([
                         'fault' => [
@@ -44,7 +46,7 @@ class Handler extends ExceptionHandler
                         ]
                     ], 404);
                 }
-                elseif ($e instanceof AuthorizationException) {
+                elseif ($e instanceof UnauthorizedHttpException || $e instanceof AuthenticationException) {
                     return response()->json([
                         'fault' => [
                             'code' => 401,
@@ -76,7 +78,7 @@ class Handler extends ExceptionHandler
                         ]
                     ], 422);
                 } elseif ($e instanceof Exception) {
-                    return response()->view('errors', [
+                    return response()->json([
                         'fault' => [
                             'code' => 500,
                             'message' => 'Произошла непредвиденная ошибка: ' . $e->getMessage(),
@@ -98,7 +100,7 @@ class Handler extends ExceptionHandler
                             'message' => 'Запрашиваемый ресурс не найден.'
                         ]
                     ], 404);
-                } elseif ($e instanceof AuthorizationException) {
+                } elseif ($e instanceof UnauthorizedHttpException || $e instanceof AuthenticationException) {
                     return response()->view('errors', [
                         'fault' => [
                             'code' => 401,

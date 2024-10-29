@@ -28,12 +28,16 @@ class CommentController extends Controller
         ];
     }
 
-    /*
-    * Оставить комментарий
-    */
     public function left(Theme $topic, CommentSendRequest $request, CommentControllerService $service): array
     {
         Gate::authorize('create', Comment::class);
+
+        if (!($request->expectsJson() || $request->wantsJson() || $request->ajax() || $request->is('api/*'))) {
+            $request->validate([
+                'g-recaptcha-response' => 'required|captcha',
+            ]);
+        }
+
         $comment = $service->createFromRequest($request->validated(), $topic, Auth::user());
 
         Cache::forget("comments_{$topic->id}");

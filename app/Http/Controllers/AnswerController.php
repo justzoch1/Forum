@@ -42,7 +42,7 @@ class AnswerController extends Controller
         Cache::forget("comments_{$answer->comment->theme_id}");
         return [
             'status' => 'success',
-            'comment' => $answer
+            'answer' => $answer
         ];
     }
 

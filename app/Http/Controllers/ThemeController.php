@@ -65,15 +65,15 @@ class ThemeController
     /*
     * Сортировать по популярности и дате загрузки
     */
-    public function sort(Theme $topic, Request $request, ThemeRepositories $repository, ThemeControllerService $service): array
+    public function sort(Request $request, Theme $topic, ThemeRepositories $repository, ThemeControllerService $service): array
     {
+        $page = $request->page != null ? $request->page : 1;
+
         $topic = Cache::remember("topic_{$topic->id}", 3600, function () use ($repository, $topic) {
             return $repository->getOne($topic);
         });
 
-        $comments = Cache::remember("comments_{$topic->id}", 3600, function () use ($service, $topic, $request) {
-            return $service->sort($topic, $request->by);
-        });
+        $comments = $service->sort($topic, $request->by, $page);
 
         $latestTopics = Cache::remember('latest_topics', 3600, function () use ($repository) {
             return $repository->getLatestList();

@@ -22,8 +22,6 @@ class ThemeFactory extends Factory
             'uuid' => (string) Str::uuid(),
             'name' => $this->faker->sentence(3),
             'description' => $this->faker->realText(),
-            'image' => $this->faker->imageUrl(),
-            'logo' => $this->faker->imageUrl(640, 480, 'business'),
             'preview' => $this->faker->paragraph(),
             'user_id' => User::factory(),
             'created_at' => now(),

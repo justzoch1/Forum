@@ -23,7 +23,7 @@ Route::get('/user', function (Request $request) {
 Route::prefix('/blog')->group(function () {
     Route::get('/', [IndexController::class, 'index'])->name('api.blog.index')->middleware(ApiOrViewGetRespond::class);
     Route::get("/search", [ IndexController::class, 'search'])->name('api.topics.search');
-    Route::get("/sort", [CommentController::class, 'sort'])->name('api.topics.comments.sort');
+    Route::get("/{topic}/sort", [ ThemeController::class, 'sort'])->name('topics.comments.sort');
     Route::get("/{topic}", [ThemeController::class, 'index'])->name('api.topics.get.one');
 });
 
@@ -36,8 +36,10 @@ Route::prefix('/oauth')->group(function () {
     });
 });
 
-Route::post('/register', [RegisteredUserController::class, 'storeWithToken'])->name('api.auth.register');
-Route::post('/login', [AuthenticatedTokenController::class, 'token'])->name('api.auth.login');
+Route::prefix('/auth')->group(function () {
+    Route::post('/register', [RegisteredUserController::class, 'storeWithToken'])->name('api.auth.register');
+    Route::post('/token', [AuthenticatedTokenController::class, 'token'])->name('api.auth.token');
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/comments')->middleware(ApiOrViewPostRespond::class)->group(function () {
@@ -57,6 +59,10 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/notifications', [NotificationController::class, 'getList'])->name('api.notifications.list')->middleware(ApiOrViewGetRespond::class);
+
+    Route::get('/user', function () {
+        return response()->json(['user' => auth()->user()]);
+    });
 
     Route::prefix('/answers')->middleware(ApiOrViewPostRespond::class)->group(function () {
         Route::post('/{comment}/{receiver}', [AnswerController::class, 'create'])->name('answers.create');
