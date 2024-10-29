@@ -23,7 +23,6 @@ class CommentSendRequest extends FormRequest
     {
         return [
             'content' => 'required|string',
-            'g-recaptcha-response' => 'required|captcha'
         ];
     }
 }
