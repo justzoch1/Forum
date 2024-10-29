@@ -13,7 +13,7 @@
                 ],
                 "summary": "Добавить ответ на комментарий",
                 "description": "Создает новый ответ на указанный комментарий и отправляет его указанному получателю.",
-                "operationId": "4f7513f4014201cc87106a8e7e3bc072",
+                "operationId": "e27a2e969ef0cb20c3562315768f9f44",
                 "parameters": [
                     {
                         "name": "comment",
@@ -272,7 +272,7 @@
                 ],
                 "summary": "Редактировать ответ",
                 "description": "Обновляет содержимое указанного ответа.",
-                "operationId": "bfb7049b70ec35d9740f8f53e8cc3da0",
+                "operationId": "a05c164fa352557a2b9b1a4731b83dec",
                 "parameters": [
                     {
                         "name": "answer",
@@ -554,7 +554,7 @@
                 ],
                 "summary": "Удаление ответа",
                 "description": "Удаляет комментарий по указанному ID.",
-                "operationId": "7f40b4da2ceb409ef614c03f2aa2f8dc",
+                "operationId": "15986a4ef2d592dd66a002836cafbee9",
                 "parameters": [
                     {
                         "name": "id",
@@ -716,7 +716,7 @@
                 ],
                 "summary": "Получить токен после аутентификации",
                 "description": "Возвращает токен доступа после успешной аутентификации.",
-                "operationId": "aac1279fb70897317b34d1cbbfb622d7",
+                "operationId": "d341009182d85183037d81b85f4a2770",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -927,7 +927,7 @@
                 ],
                 "summary": "Получить токен после регистрации",
                 "description": "Возвращает информацию о пользователе после успешной регистрации.",
-                "operationId": "40a41942a872123aceedb124a9212cb1",
+                "operationId": "c72de08673a3b8972ffed0d1700d30b1",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1131,7 +1131,7 @@
                 ],
                 "summary": "Добавить комментарий к теме",
                 "description": "Создает новый комментарий для указанной темы.",
-                "operationId": "38f5973474884a4012a5e5552b753830",
+                "operationId": "c187f86ac2135ba6662ae96e8f3542ef",
                 "parameters": [
                     {
                         "name": "topic",
@@ -1378,7 +1378,7 @@
                 ],
                 "summary": "Редактировать комментарий",
                 "description": "Обновляет комментарий по указанному ID.",
-                "operationId": "e7d6fbe8d0f82be6aef9c84dbbe9b0f4",
+                "operationId": "39e62963cbf897a1b2168683878e0a46",
                 "parameters": [
                     {
                         "name": "id",
@@ -1635,7 +1635,7 @@
                 ],
                 "summary": "Удаление комментария",
                 "description": "Удаляет комментарий по указанному ID.",
-                "operationId": "bb0baff7545169a57f63ee49aa86262f",
+                "operationId": "ae800c7750c541bbe155602ffb488f9a",
                 "parameters": [
                     {
                         "name": "id",
@@ -1797,7 +1797,7 @@
                 ],
                 "summary": "Получает список тем",
                 "description": "Возвращает список популярных и последних тем.",
-                "operationId": "f90ade7e8faeb644e4910b74e974661a",
+                "operationId": "dfd58bf57c12b6c19367cd268848a2ea",
                 "responses": {
                     "200": {
                         "description": "Успешный ответ с данными тем",
@@ -1970,7 +1970,7 @@
                 ],
                 "summary": "Получает список тем",
                 "description": "Возвращает список популярных тем по ключевым фразам в описании и названии.",
-                "operationId": "9579aca428084dea5083598dc064bd7e",
+                "operationId": "43fa490389446961751a82713d51e355",
                 "parameters": [
                     {
                         "name": "q",
@@ -2156,7 +2156,7 @@
                 ],
                 "summary": "Получает список сообщений между текущим авторизированным пользователем и указанным пользователем",
                 "description": "Возвращает список сообщений и информацию о пользователях",
-                "operationId": "8ef80ce8a2417e6a566ba979b11987eb",
+                "operationId": "16d2c19b263cc46d4a88daf042b5fbe6",
                 "parameters": [
                     {
                         "name": "receiver",
@@ -2315,7 +2315,7 @@
                 ],
                 "summary": "Отправить сообщение пользователю",
                 "description": "Отправляет сообщение указанному пользователю.",
-                "operationId": "c77b970c96df21461b86d6f72cd5621c",
+                "operationId": "773328bddd892c5d14b6ae82798a993d",
                 "parameters": [
                     {
                         "name": "receiver",
@@ -2568,7 +2568,7 @@
                 ],
                 "summary": "Отредактировать сообщение",
                 "description": "Обновляет содержимое указанного сообщения.",
-                "operationId": "f38b0641d3a4e38f80439eea030f47d5",
+                "operationId": "ea2105a48104e83fc32b85c9b3c9b48f",
                 "parameters": [
                     {
                         "name": "id",
@@ -2818,7 +2818,7 @@
                 ],
                 "summary": "Удаляет сообщение",
                 "description": "Удаляет сообщение по указанному ID.",
-                "operationId": "0ffbe5e38db00148c0860bf172b1af2b",
+                "operationId": "3c5b23cdae43b6741cc9dd41fdbab98f",
                 "parameters": [
                     {
                         "name": "id",
@@ -2979,7 +2979,7 @@
                     "Notifications"
                 ],
                 "summary": "Получает список уведомлений пользователя",
-                "operationId": "6353bb88df85ac3b11f3e0a5e57a136c",
+                "operationId": "dc1bd28cf316f0518f96266dc2066fee",
                 "responses": {
                     "200": {
                         "description": "Успешный ответ с данными уведомлений",
@@ -3140,7 +3140,7 @@
                     "Theme"
                 ],
                 "summary": "Получить данные для страницы темы",
-                "operationId": "da249b8057722e31cb2363c58201f1b1",
+                "operationId": "98481d405060784b43fa584e60e2dc81",
                 "parameters": [
                     {
                         "name": "id",
@@ -3429,7 +3429,7 @@
                     "Theme"
                 ],
                 "summary": "Сортировать темы по популярности и дате загрузки",
-                "operationId": "d765b453c548ceb3d37030f22d89d6be",
+                "operationId": "0837b174bef2dc685592a0b49ffd8047",
                 "parameters": [
                     {
                         "name": "id",
