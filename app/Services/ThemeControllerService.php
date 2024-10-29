@@ -58,22 +58,25 @@ class ThemeControllerService
         return $themes;
     }
 
-    public function sort(Theme $topic, string $by): Collection {
+    public function sort(Theme $topic, string $by, string $page): Collection {
+        $perPage = 6;
+        $take = $page * $perPage;
+
         $comments = $by == 'popular'
             ? Comment::where('theme_id', $topic->id)
                 ->onlyApproved()
                 ->withAnswers()
                 ->withThemeAndUser()
                 ->SortByAnswerCount()
-                ->paginate(6)
-                ->collect()
+                ->take($take)
+                ->get()
             : Comment::where('theme_id', $topic->id)
                 ->onlyApproved()
                 ->withAnswers()
                 ->withThemeAndUser()
                 ->latest('created_at')
-                ->paginate(6)
-                ->collect();
+                ->take($take)
+                ->get();
 
         return $comments;
     }
