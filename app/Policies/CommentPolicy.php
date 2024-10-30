@@ -4,11 +4,14 @@ namespace App\Policies;
 
 use App\Models\Comment;
 use App\Models\User;
+use App\Traits\AdminPanel;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Log;
 
 class CommentPolicy
 {
+    use AdminPanel;
+
     /**
      * Determine whether the user can view any models.
      */
@@ -30,7 +33,7 @@ class CommentPolicy
      */
     public function create(User $user): bool
     {
-        if (!is_null($user->permissions)) {
+        if ($this->isAdminPanel()) {
             return $user->hasAccess('platform.resource.add');
         }
 
@@ -42,7 +45,7 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment): bool
     {
-        if (!is_null($user->permissions)) {
+        if ($this->isAdminPanel()) {
             return $user->hasAccess('platform.resource.edit');
         }
 
@@ -54,7 +57,7 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): bool
     {
-        if (!is_null($user->permissions)) {
+        if ($this->isAdminPanel()) {
             return $user->hasAccess('platform.resource.destroy');
         }
 

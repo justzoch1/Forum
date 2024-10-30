@@ -4,9 +4,12 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Theme;
+use App\Traits\AdminPanel;
 
 class ThemePolicy
 {
+    use AdminPanel;
+
     /**
      * Determine whether the user can view any models.
      */
@@ -28,7 +31,7 @@ class ThemePolicy
      */
     public function create(User $user): bool
     {
-        if (!is_null($user->permissions)) {
+        if ($this->isAdminPanel()) {
             return $user->hasAccess('platform.resource.add');
         }
 
@@ -40,7 +43,7 @@ class ThemePolicy
      */
     public function update(User $user, Theme $topic): bool
     {
-        if (!is_null($user->permissions)) {
+        if ($this->isAdminPanel()) {
             return $user->hasAccess('platform.resource.edit');
         }
 
@@ -52,7 +55,7 @@ class ThemePolicy
      */
     public function delete(User $user, Theme $topic): bool
     {
-        if (!is_null($user->permissions)) {
+        if ($this->isAdminPanel()) {
             return $user->hasAccess('platform.resource.destroy');
         }
 
