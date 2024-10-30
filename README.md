@@ -23,7 +23,10 @@
 #### 6. Запуск миграций
    
    ``` php artisan migrate ```
-   
+
+#### 6. Добавление администратора
+
+``` php artisan orchid:admin admin admin@admin.com password ```
 
 ## Запуск сервера:
 
