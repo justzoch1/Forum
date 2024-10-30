@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MessageSendRequest;
 use App\Http\Requests\MessageUpdateRequest;
+use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Models\User;
 use App\Services\MessengerControllerService;
@@ -111,7 +112,9 @@ class MessengerController
         Log::info(['Отправитель - ' => $sender->id, 'Получатель' => $receiver->id]);
 
         return [
-            'items' => $message,
+            'items' => [
+                'messages' => MessageResource::collection($message),
+            ],
             'receiver' => $receiver
         ];
     }

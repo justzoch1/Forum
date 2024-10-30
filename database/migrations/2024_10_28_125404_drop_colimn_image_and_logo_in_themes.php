@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('themes', function (Blueprint $table) {
-            $table->dropColumn('logo');
-            $table->dropColumn('image');
+//            $table->dropColumn('logo');
+//            $table->dropColumn('image');
         });
     }
 

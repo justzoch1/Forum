@@ -19,7 +19,6 @@ class ThemeFactory extends Factory
     public function definition(): array
     {
         return [
-            'uuid' => (string) Str::uuid(),
             'name' => $this->faker->sentence(3),
             'description' => $this->faker->realText(),
             'preview' => $this->faker->paragraph(),

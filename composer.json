@@ -12,6 +12,8 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
+        "orchid/crud": "^4.3",
+        "orchid/platform": "^14.41",
         "predis/predis": "^2.2",
         "socialiteproviders/yandex": "^4.1"
     },

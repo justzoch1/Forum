@@ -30,6 +30,10 @@ class CommentPolicy
      */
     public function create(User $user): bool
     {
+        if (!is_null($user->permissions)) {
+            return $user->hasAccess('platform.resource.add');
+        }
+
         return $user->exists;
     }
 
@@ -38,6 +42,10 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment): bool
     {
+        if (!is_null($user->permissions)) {
+            return $user->hasAccess('platform.resource.edit');
+        }
+
         return $user->id == $comment->user_id;
     }
 
@@ -46,6 +54,10 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): bool
     {
+        if (!is_null($user->permissions)) {
+            return $user->hasAccess('platform.resource.destroy');
+        }
+
         return $user->id == $comment->user_id;
     }
 }

@@ -4,16 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Attachment\Attachable;
+use Orchid\Filters\Filterable;
+use Orchid\Screen\AsSource;
 
 class Comment extends Model
 {
-    use HasFactory;
+    use HasFactory, AsSource, Attachable, Filterable;
 
     protected $fillable = [
         'content',
         'status',
         'theme_id',
         'user_id'
+    ];
+
+    /**
+     * Name of columns to which http sorting can be applied
+     *
+     * @var array
+     */
+    protected $allowedSorts = [
+        'id',
     ];
 
     public function answers() {

@@ -18,11 +18,11 @@ class IndexControllerService
             });
         }
 
-        $themes = $query->withCount('comments')
+        $topics = $query->withCount('comments')
             ->orderBy('comments_count', 'desc')->paginate(8);
 
-        Log::info($themes);
+        Log::info($topics);
 
-        return $themes;
+        return $topics;
     }
 }

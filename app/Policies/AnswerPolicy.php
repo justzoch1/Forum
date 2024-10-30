@@ -30,6 +30,10 @@ class AnswerPolicy
      */
     public function create(User $user): bool
     {
+        if (!is_null($user->permissions)) {
+            return $user->hasAccess('platform.resource.add');
+        }
+
         return $user->exists;
     }
 
@@ -38,6 +42,10 @@ class AnswerPolicy
      */
     public function update(User $user, Answer $answer): bool
     {
+        if (!is_null($user->permissions)) {
+            return $user->hasAccess('platform.resource.edit');
+        }
+
         Log::info(['user' => $user->id, 'answer' => $answer->user_id]);
         return $user->id == $answer->user_id;
     }
@@ -47,6 +55,10 @@ class AnswerPolicy
      */
     public function delete(User $user, Answer $answer): bool
     {
+        if (!is_null($user->permissions)) {
+            return $user->hasAccess('platform.resource.destroy');
+        }
+
         return $user->id == $answer->user_id;
     }
 }
