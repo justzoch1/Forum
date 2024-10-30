@@ -2219,80 +2219,7 @@
                                             "type": "object"
                                         },
                                         "receiver": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer"
-                                                },
-                                                "name": {
-                                                    "type": "string"
-                                                },
-                                                "email": {
-                                                    "type": "string"
-                                                },
-                                                "email_verified_at": {
-                                                    "type": "string",
-                                                    "nullable": true
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "format": "date-time"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Получатель не найден",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "fault": {
-                                            "properties": {
-                                                "code": {
-                                                    "type": "integer",
-                                                    "example": 404
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Получатель не найден."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Ошибка сервера",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "fault": {
-                                            "properties": {
-                                                "code": {
-                                                    "type": "integer",
-                                                    "example": 500
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Произошла непредвиденная ошибка."
-                                                }
-                                            },
-                                            "type": "object"
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -3674,6 +3601,58 @@
         }
     },
     "components": {
+        "responses": {
+            "404": {
+                "description": "Получатель не найден",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "fault": {
+                                    "properties": {
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Получатель не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "500": {
+                "description": "Ошибка сервера",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "fault": {
+                                    "properties": {
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Произошла непредвиденная ошибка."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
