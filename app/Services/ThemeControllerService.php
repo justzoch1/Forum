@@ -18,9 +18,7 @@ class ThemeControllerService
         $take = $page * $perPage;
 
         $comments = Comment::where('theme_id', $topic->id)
-            ->withAnswers()
             ->onlyApproved()
-            ->withThemeAndUser()
             ->latest('created_at')
             ->take($take)
             ->get();

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CommentResource;
+use App\Http\Resources\LatestTopicResource;
 use App\Models\Theme;
 use App\Repositories\ThemeRepositories;
 use App\Services\CommentControllerService;
@@ -169,9 +171,9 @@ class ThemeController
         return [
             'items' => [
                 'topic' => $topic,
-                'latest' => $latestTopics,
-                'next' => $nextTopics,
-                'comments' => $comments,
+                'latest_topics' => LatestTopicResource::collection($latestTopics),
+                'next_topics' => $nextTopics,
+                'comments' => CommentResource::collection($comments),
             ]
         ];
     }
@@ -341,9 +343,9 @@ class ThemeController
         return [
             'items' => [
                 'topic' => $topic,
-                'latest' => $latestTopics,
-                'next' => $nextTopics,
-                'comments' => $comments,
+                'latest_topics' => LatestTopicResource::collection($latestTopics),
+                'next_topics' => $nextTopics,
+                'comments' => CommentResource::collection($comments),
             ]
         ];
     }

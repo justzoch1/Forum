@@ -16,7 +16,7 @@
                 <div class="ant106_post-related-post mb-4">
                     <h3 class="ant106_post-inner-title">Еще записи</h3>
                     <div class="row text-center">
-                        @foreach($items->next as $topic)
+                        @foreach($items->next_topics as $topic)
                             <div class="col-md-6">
                                 <div class="ant106_post-latest-news-box">
                                     <div class="ant106_post-latest-news-content">
@@ -52,11 +52,11 @@
                     @foreach ($items->comments as $comment)
                         <div class="ant106_post-comment-item">
                             <div class="ant106_post-comment-content">
-                                <h6><a href="{{ route('messenger', $comment->user_id )}}" class="text-dark">{{ $comment->user_name }}</a></h6>
+                                <h6><a href="{{ route('messenger', $comment->author->id) }}" class="text-dark">{{ $comment->author->name }}</a></h6>
                                 <span class="ant106_post-date">{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</span>
                                 <p>{{ $comment->content }}</p>
                                 @auth
-                                    @if(auth()->user()->id == $comment->user_id)
+                                    @if(auth()->user()->id == $comment->author->id)
                                         <form action="{{ route('comments.delete', $comment->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
@@ -76,7 +76,7 @@
                                 @can('create', App\Models\Comment::class)
                                     <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $comment->id }}')">Ответить</a>
                                     <div id="reply-form-{{ $comment->id }}" class="reply-form mb-3" style="display: none;">
-                                        <form method="POST" action="{{ route('answers.create', [ $comment->id, $comment->user_id])}}">
+                                        <form method="POST" action="{{ route('answers.create', [$comment->id, $comment->author->id]) }}">
                                             @csrf
                                             <textarea name="content" class="form-control" rows="3" placeholder="Ваш ответ..."></textarea>
                                             <button type="submit" class="btn btn-primary mt-2">Отправить</button>
@@ -88,13 +88,13 @@
                         @foreach ($comment->answers as $answer)
                             <div class="ant106_post-comment-item ant106_post-replay-comment">
                                 <div class="ant106_post-comment-content">
-                                    <h6>От: <a href="{{ route('messenger', $answer->author_id )}}" class="text-dark">{{ $answer->author_name }}</a> Кому: <a href="{{ route('messenger', $answer->receiver_id )}}" class="text-dark">{{ $answer->receiver_name }}</a></h6>
+                                    <h6>От: <a href="{{ route('messenger', $answer->author->id) }}" class="text-dark">{{ $answer->author->name }}</a> Кому: <a href="{{ route('messenger', $answer->receiver->id) }}" class="text-dark">{{ $answer->receiver->name }}</a></h6>
                                     <span class="ant106_post-date">{{ \Carbon\Carbon::parse($answer->created_at)->diffForHumans() }}</span>
                                     <p>{{ $answer->content }}</p>
                                     @can('create', App\Models\Answer::class)
                                         <a href="#" class="ant106_post-replay" onclick="toggleReplyForm(event, 'reply-form-{{ $answer->id }}')">Ответить</a>
                                         <div id="reply-form-{{ $answer->id }}" class="reply-form mb-3" style="display: none;">
-                                            <form method="POST" action="{{ route('answers.create', [$comment->id, $answer->user_id] ) }}">
+                                            <form method="POST" action="{{ route('answers.create', [$comment->id, $answer->author->id]) }}">
                                                 @csrf
                                                 <textarea name="content" class="form-control" rows="3" placeholder="Ваш ответ..."></textarea>
                                                 <button type="submit" class="btn btn-primary mt-2">Отправить</button>
@@ -103,7 +103,7 @@
                                     @endcan
                                 </div>
                                 @auth
-                                    @if(auth()->user()->id == $answer->user_id)
+                                    @if(auth()->user()->id == $answer->author->id)
                                         <form action="{{ route('answers.delete', $answer->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
@@ -143,7 +143,7 @@
                     <div class="ant106_post-widget news-ant106_post-widget">
                         <h3 class="ant106_post-widget-title">Последние записи</h3>
                         <ul class="ant106_post-list-style-one">
-                            @foreach($items->latest as $topic)
+                            @foreach($items->latest_topics as $topic)
                                 <li><a href="{{ route('topics.get.one', $topic->id) }}">{{ $topic->name }}</a></li>
                             @endforeach
                         </ul>
