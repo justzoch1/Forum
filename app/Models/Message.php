@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Attachment\Attachable;
+use Orchid\Filters\Filterable;
+use Orchid\Screen\AsSource;
 
 class Message extends Model
 {
-    use HasFactory;
+    use HasFactory, AsSource, Filterable, Attachable;
 
     protected $fillable = [
         'sender_id',
@@ -22,10 +25,5 @@ class Message extends Model
 
     public function receiver() {
         return $this->belongsTo(User::class, 'receiver_id');
-    }
-
-    public function scopeWithSenderAndReceiver($query) {
-        $query->join('users as sender', 'sender.id', '=', 'messages.sender_id')
-            ->select('messages.*', 'sender.name as sender_name');
     }
 }

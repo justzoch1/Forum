@@ -3,6 +3,9 @@
         @auth
             <a class="btn btn-link me-4">{{ auth()->user()->name }}</a>
             <a href="{{ route('notifications.list') }}" class="btn btn-link">Уведомления</a>
+            @if(!is_null(auth()->user()->permissions) && auth()->user()->hasAccess('platform.admin.access'))
+                <a href="{{ route('platform.main') }}" class="btn btn-link">Панель администратора</a>
+            @endif
         @endauth
         @guest
             <a href="{{ route('login') }}" class="btn btn-link">Войти</a>

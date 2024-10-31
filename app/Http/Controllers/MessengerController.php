@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MessageSendRequest;
 use App\Http\Requests\MessageUpdateRequest;
+use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Models\User;
 use App\Services\MessengerControllerService;
@@ -66,15 +67,7 @@ class MessengerController
      *                     )
      *                 )
      *             ),
-     *             @OA\Property(
-     *                 property="receiver",
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer"),
-     *                 @OA\Property(property="name", type="string"),
-     *                 @OA\Property(property="email", type="string"),
-     *                 @OA\Property(property="email_verified_at", type="string", nullable=true),
-     *                 @OA\Property(property="created_at", type="string", format="date-time"),
-     *                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *             @OA\Property( property="receiver", type="string"),
      *             )
      *         )
      *     ),
@@ -111,8 +104,10 @@ class MessengerController
         Log::info(['Отправитель - ' => $sender->id, 'Получатель' => $receiver->id]);
 
         return [
-            'items' => $message,
-            'receiver' => $receiver
+            'items' => [
+                'messages' => MessageResource::collection($message),
+            ],
+            'receiver' => $receiver->name
         ];
     }
 

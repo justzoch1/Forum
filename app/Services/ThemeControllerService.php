@@ -18,9 +18,7 @@ class ThemeControllerService
         $take = $page * $perPage;
 
         $comments = Comment::where('theme_id', $topic->id)
-            ->withAnswers()
             ->onlyApproved()
-            ->withThemeAndUser()
             ->latest('created_at')
             ->take($take)
             ->get();
@@ -37,25 +35,6 @@ class ThemeControllerService
             ->collect();
 
         return $topics;
-    }
-
-    public function search(?string $q = ''): Collection
-    {
-        $query = Theme::query();
-
-        if (!empty($q)) {
-            $query->where(function ($query) use ($q) {
-                $query->where('name', 'like', '%' . $q . '%')
-                    ->orWhere('description', 'like', '%' . $q . '%');
-            });
-        }
-
-        $themes = $query->withCount('comments')
-            ->orderBy('comments_count', 'desc')->paginate(8);
-
-        Log::info($themes);
-
-        return $themes;
     }
 
     public function sort(Theme $topic, string $by, string $page): Collection {

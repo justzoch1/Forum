@@ -2219,80 +2219,7 @@
                                             "type": "object"
                                         },
                                         "receiver": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer"
-                                                },
-                                                "name": {
-                                                    "type": "string"
-                                                },
-                                                "email": {
-                                                    "type": "string"
-                                                },
-                                                "email_verified_at": {
-                                                    "type": "string",
-                                                    "nullable": true
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "format": "date-time"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Получатель не найден",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "fault": {
-                                            "properties": {
-                                                "code": {
-                                                    "type": "integer",
-                                                    "example": 404
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Получатель не найден."
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Ошибка сервера",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "fault": {
-                                            "properties": {
-                                                "code": {
-                                                    "type": "integer",
-                                                    "example": 500
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Произошла непредвиденная ошибка."
-                                                }
-                                            },
-                                            "type": "object"
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -3183,9 +3110,6 @@
                                                         "name": {
                                                             "type": "string"
                                                         },
-                                                        "description": {
-                                                            "type": "string"
-                                                        },
                                                         "preview": {
                                                             "type": "string"
                                                         },
@@ -3203,54 +3127,40 @@
                                                     },
                                                     "type": "object"
                                                 },
-                                                "latest": {
+                                                "latest_topics": {
                                                     "type": "array",
                                                     "items": {
                                                         "properties": {
                                                             "id": {
                                                                 "type": "integer"
                                                             },
-                                                            "uuid": {
-                                                                "type": "string"
-                                                            },
                                                             "name": {
                                                                 "type": "string"
-                                                            },
-                                                            "description": {
-                                                                "type": "string"
-                                                            },
-                                                            "preview": {
-                                                                "type": "string"
-                                                            },
-                                                            "created_at": {
-                                                                "type": "string",
-                                                                "format": "date-time"
-                                                            },
-                                                            "updated_at": {
-                                                                "type": "string",
-                                                                "format": "date-time"
                                                             }
                                                         },
                                                         "type": "object"
                                                     }
                                                 },
-                                                "next": {
+                                                "next_topics": {
                                                     "type": "array",
                                                     "items": {
                                                         "properties": {
                                                             "id": {
                                                                 "type": "integer"
                                                             },
-                                                            "uuid": {
-                                                                "type": "string"
-                                                            },
                                                             "name": {
                                                                 "type": "string"
                                                             },
-                                                            "description": {
+                                                            "preview": {
                                                                 "type": "string"
                                                             },
-                                                            "preview": {
+                                                            "user_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "comments_count": {
+                                                                "type": "integer"
+                                                            },
+                                                            "description": {
                                                                 "type": "string"
                                                             },
                                                             "created_at": {
@@ -3273,37 +3183,19 @@
                                                                 "description": "ID комментария",
                                                                 "type": "integer"
                                                             },
-                                                            "content": {
-                                                                "type": "string"
-                                                            },
-                                                            "status": {
-                                                                "type": "string"
-                                                            },
-                                                            "last_updated": {
-                                                                "type": "string",
-                                                                "format": "date-time"
-                                                            },
                                                             "theme_id": {
                                                                 "type": "integer"
                                                             },
-                                                            "user_id": {
-                                                                "type": "integer"
-                                                            },
-                                                            "created_at": {
-                                                                "type": "string",
-                                                                "format": "date-time"
-                                                            },
-                                                            "updated_at": {
-                                                                "type": "string"
-                                                            },
-                                                            "theme_name": {
-                                                                "type": "string"
-                                                            },
-                                                            "user_name": {
-                                                                "type": "string"
-                                                            },
-                                                            "user_email": {
-                                                                "type": "string"
+                                                            "author": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer"
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "type": "object"
                                                             },
                                                             "answers": {
                                                                 "type": "array",
@@ -3315,28 +3207,29 @@
                                                                         "comment_id": {
                                                                             "type": "integer"
                                                                         },
-                                                                        "user_id": {
-                                                                            "type": "integer"
+                                                                        "author": {
+                                                                            "properties": {
+                                                                                "id": {
+                                                                                    "type": "integer"
+                                                                                },
+                                                                                "name": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "receiver": {
+                                                                            "properties": {
+                                                                                "id": {
+                                                                                    "type": "integer"
+                                                                                },
+                                                                                "name": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
                                                                         },
                                                                         "content": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "receiver_id": {
-                                                                            "type": "integer"
-                                                                        },
-                                                                        "author_name": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "author_email": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "author_id": {
-                                                                            "type": "integer"
-                                                                        },
-                                                                        "receiver_name": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "receiver_email": {
                                                                             "type": "string"
                                                                         },
                                                                         "created_at": {
@@ -3350,6 +3243,16 @@
                                                                     },
                                                                     "type": "object"
                                                                 }
+                                                            },
+                                                            "content": {
+                                                                "type": "string"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string"
                                                             }
                                                         },
                                                         "type": "object"
@@ -3480,9 +3383,6 @@
                                                         "name": {
                                                             "type": "string"
                                                         },
-                                                        "description": {
-                                                            "type": "string"
-                                                        },
                                                         "preview": {
                                                             "type": "string"
                                                         },
@@ -3500,54 +3400,40 @@
                                                     },
                                                     "type": "object"
                                                 },
-                                                "latest": {
+                                                "latest_topics": {
                                                     "type": "array",
                                                     "items": {
                                                         "properties": {
                                                             "id": {
                                                                 "type": "integer"
                                                             },
-                                                            "uuid": {
-                                                                "type": "string"
-                                                            },
                                                             "name": {
                                                                 "type": "string"
-                                                            },
-                                                            "description": {
-                                                                "type": "string"
-                                                            },
-                                                            "preview": {
-                                                                "type": "string"
-                                                            },
-                                                            "created_at": {
-                                                                "type": "string",
-                                                                "format": "date-time"
-                                                            },
-                                                            "updated_at": {
-                                                                "type": "string",
-                                                                "format": "date-time"
                                                             }
                                                         },
                                                         "type": "object"
                                                     }
                                                 },
-                                                "next": {
+                                                "next_topics": {
                                                     "type": "array",
                                                     "items": {
                                                         "properties": {
                                                             "id": {
                                                                 "type": "integer"
                                                             },
-                                                            "uuid": {
-                                                                "type": "string"
-                                                            },
                                                             "name": {
                                                                 "type": "string"
                                                             },
-                                                            "description": {
+                                                            "preview": {
                                                                 "type": "string"
                                                             },
-                                                            "preview": {
+                                                            "user_id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "comments_count": {
+                                                                "type": "integer"
+                                                            },
+                                                            "description": {
                                                                 "type": "string"
                                                             },
                                                             "created_at": {
@@ -3570,37 +3456,19 @@
                                                                 "description": "ID комментария",
                                                                 "type": "integer"
                                                             },
-                                                            "content": {
-                                                                "type": "string"
-                                                            },
-                                                            "status": {
-                                                                "type": "string"
-                                                            },
-                                                            "last_updated": {
-                                                                "type": "string",
-                                                                "format": "date-time"
-                                                            },
                                                             "theme_id": {
                                                                 "type": "integer"
                                                             },
-                                                            "user_id": {
-                                                                "type": "integer"
-                                                            },
-                                                            "created_at": {
-                                                                "type": "string",
-                                                                "format": "date-time"
-                                                            },
-                                                            "updated_at": {
-                                                                "type": "string"
-                                                            },
-                                                            "theme_name": {
-                                                                "type": "string"
-                                                            },
-                                                            "user_name": {
-                                                                "type": "string"
-                                                            },
-                                                            "user_email": {
-                                                                "type": "string"
+                                                            "author": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer"
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "type": "object"
                                                             },
                                                             "answers": {
                                                                 "type": "array",
@@ -3612,28 +3480,29 @@
                                                                         "comment_id": {
                                                                             "type": "integer"
                                                                         },
-                                                                        "user_id": {
-                                                                            "type": "integer"
+                                                                        "author": {
+                                                                            "properties": {
+                                                                                "id": {
+                                                                                    "type": "integer"
+                                                                                },
+                                                                                "name": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "receiver": {
+                                                                            "properties": {
+                                                                                "id": {
+                                                                                    "type": "integer"
+                                                                                },
+                                                                                "name": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
                                                                         },
                                                                         "content": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "receiver_id": {
-                                                                            "type": "integer"
-                                                                        },
-                                                                        "author_name": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "author_email": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "author_id": {
-                                                                            "type": "integer"
-                                                                        },
-                                                                        "receiver_name": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "receiver_email": {
                                                                             "type": "string"
                                                                         },
                                                                         "created_at": {
@@ -3647,6 +3516,16 @@
                                                                     },
                                                                     "type": "object"
                                                                 }
+                                                            },
+                                                            "content": {
+                                                                "type": "string"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string"
                                                             }
                                                         },
                                                         "type": "object"
@@ -3722,6 +3601,58 @@
         }
     },
     "components": {
+        "responses": {
+            "404": {
+                "description": "Получатель не найден",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "fault": {
+                                    "properties": {
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 404
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Получатель не найден."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "500": {
+                "description": "Ошибка сервера",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "fault": {
+                                    "properties": {
+                                        "code": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Произошла непредвиденная ошибка."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",

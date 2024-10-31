@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CommentResource;
+use App\Http\Resources\LatestTopicResource;
 use App\Models\Theme;
 use App\Repositories\ThemeRepositories;
 use App\Services\CommentControllerService;
@@ -48,38 +50,34 @@ class ThemeController
      *                     @OA\Property(property="id", type="integer"),
      *                     @OA\Property(property="uuid", type="string"),
      *                     @OA\Property(property="name", type="string"),
-     *                     @OA\Property(property="description", type="string"),
      *                     @OA\Property(property="preview", type="string"),
-     *                     @OA\Property(property="comments_count", type="int"),
+     *                     @OA\Property(property="comments_count", type="integer"),
      *                     @OA\Property(property="created_at", type="string", format="date-time"),
      *                     @OA\Property(property="updated_at", type="string", format="date-time"),
      *                 ),
      *                 @OA\Property(
-     *                     property="latest",
+     *                     property="latest_topics",
      *                     type="array",
      *                     @OA\Items(
      *                         type="object",
-     *                          @OA\Property(property="id", type="integer"),
-     *                          @OA\Property(property="uuid", type="string"),
-     *                          @OA\Property(property="name", type="string"),
-     *                          @OA\Property(property="description", type="string"),
-     *                          @OA\Property(property="preview", type="string"),
-     *                          @OA\Property(property="created_at", type="string", format="date-time"),
-     *                          @OA\Property(property="updated_at", type="string", format="date-time"),
-     *                      )
+     *                         @OA\Property(property="id", type="integer"),
+     *                         @OA\Property(property="name", type="string"),
+     *                     )
      *                 ),
      *                 @OA\Property(
-     *                     property="next",
+     *                     property="next_topics",
      *                     type="array",
      *                     @OA\Items(
-     *                           @OA\Property(property="id", type="integer"),
-     *                           @OA\Property(property="uuid", type="string"),
-     *                           @OA\Property(property="name", type="string"),
-     *                           @OA\Property(property="description", type="string"),
-     *                           @OA\Property(property="preview", type="string"),
-     *                           @OA\Property(property="created_at", type="string", format="date-time"),
-     *                           @OA\Property(property="updated_at", type="string", format="date-time"),
-     *                       )
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer"),
+     *                         @OA\Property(property="name", type="string"),
+     *                         @OA\Property(property="preview", type="string"),
+     *                         @OA\Property(property="user_id", type="integer"),
+     *                         @OA\Property(property="comments_count", type="integer"),
+     *                         @OA\Property(property="description", type="string"),
+     *                         @OA\Property(property="created_at", type="string", format="date-time"),
+     *                         @OA\Property(property="updated_at", type="string", format="date-time"),
+     *                     )
      *                 ),
      *                 @OA\Property(
      *                     property="comments",
@@ -87,37 +85,42 @@ class ThemeController
      *                     @OA\Items(
      *                         type="object",
      *                         @OA\Property(property="id", type="integer", description="ID комментария"),
-     *                          @OA\Property(property="content", type="string"),
-     *                          @OA\Property(property="status", type="string"),
-     *                          @OA\Property(property="last_updated", type="string", format="date-time"),
-     *                          @OA\Property(property="theme_id", type="integer"),
-     *                          @OA\Property(property="user_id", type="integer"),
-     *                          @OA\Property(property="created_at", type="string", format="date-time"),
-     *                          @OA\Property(property="updated_at", type="string"),
-     *                          @OA\Property(property="theme_name", type="string"),
-     *                          @OA\Property(property="user_name", type="string"),
-     *                          @OA\Property(property="user_email", type="string"),
-     *                          @OA\Property(
-     *                              property="answers",
-     *                              type="array",
-     *                              @OA\Items(
-     *                                  type="object",
-     *                                  @OA\Property(property="id", type="integer"),
-     *                                  @OA\Property(property="comment_id", type="integer"),
-     *                                  @OA\Property(property="user_id", type="integer"),
-     *                                  @OA\Property(property="content", type="string"),
-     *                                  @OA\Property(property="receiver_id", type="integer"),
-     *                                  @OA\Property(property="author_name", type="string"),
-     *                                  @OA\Property(property="author_email", type="string"),
-     *                                  @OA\Property(property="author_id", type="integer"),
-     *                                  @OA\Property(property="receiver_name", type="string"),
-     *                                  @OA\Property(property="receiver_email", type="string"),
-     *                                  @OA\Property(property="created_at", type="string", format="date-time"),
-     *                                  @OA\Property(property="updated_at", type="string", format="date-time")
-     *                      )
-     *                   )
-     *                )
-     *               )
+     *                         @OA\Property(property="theme_id", type="integer"),
+     *                         @OA\Property(
+     *                             property="author",
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer"),
+     *                             @OA\Property(property="name", type="string")
+     *                         ),
+     *                         @OA\Property(
+     *                             property="answers",
+     *                             type="array",
+     *                             @OA\Items(
+     *                                 type="object",
+     *                                 @OA\Property(property="id", type="integer"),
+     *                                 @OA\Property(property="comment_id", type="integer"),
+     *                                 @OA\Property(
+     *                                     property="author",
+     *                                     type="object",
+     *                                     @OA\Property(property="id", type="integer"),
+     *                                     @OA\Property(property="name", type="string")
+     *                                 ),
+     *                                 @OA\Property(
+     *                                     property="receiver",
+     *                                     type="object",
+     *                                     @OA\Property(property="id", type="integer"),
+     *                                     @OA\Property(property="name", type="string")
+     *                                 ),
+     *                                 @OA\Property(property="content", type="string"),
+     *                                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                                 @OA\Property(property="updated_at", type="string", format="date-time")
+     *                             )
+     *                         ),
+     *                         @OA\Property(property="content", type="string"),
+     *                         @OA\Property(property="created_at", type="string", format="date-time"),
+     *                         @OA\Property(property="updated_at", type="string"),
+     *                     )
+     *                 )
      *             )
      *         )
      *     ),
@@ -169,9 +172,9 @@ class ThemeController
         return [
             'items' => [
                 'topic' => $topic,
-                'latest' => $latestTopics,
-                'next' => $nextTopics,
-                'comments' => $comments,
+                'latest_topics' => LatestTopicResource::collection($latestTopics),
+                'next_topics' => $nextTopics,
+                'comments' => CommentResource::collection($comments),
             ]
         ];
     }
@@ -213,45 +216,41 @@ class ThemeController
      *              @OA\Property(
      *                  property="items",
      *                  type="object",
-     *                  @OA\Property(
+     *                 @OA\Property(
      *                      property="topic",
      *                      type="object",
      *                      description="Данные темы",
      *                      @OA\Property(property="id", type="integer"),
      *                      @OA\Property(property="uuid", type="string"),
-     *                      @OA\Property(property="name", type="string"),
-     *                      @OA\Property(property="description", type="string"),
+     *                     @OA\Property(property="name", type="string"),
      *                      @OA\Property(property="preview", type="string"),
-     *                      @OA\Property(property="comments_count", type="int"),
+     *                      @OA\Property(property="comments_count", type="integer"),
      *                      @OA\Property(property="created_at", type="string", format="date-time"),
      *                      @OA\Property(property="updated_at", type="string", format="date-time"),
      *                  ),
      *                  @OA\Property(
-     *                      property="latest",
+     *                      property="latest_topics",
+     *                      type="array",
+     *                     @OA\Items(
+     *                         type="object",
+     *                          @OA\Property(property="id", type="integer"),
+     *                          @OA\Property(property="name", type="string"),
+     *                      )
+     *                  ),
+     *                  @OA\Property(
+     *                      property="next_topics",
      *                      type="array",
      *                      @OA\Items(
      *                          type="object",
-     *                           @OA\Property(property="id", type="integer"),
-     *                           @OA\Property(property="uuid", type="string"),
-     *                           @OA\Property(property="name", type="string"),
-     *                           @OA\Property(property="description", type="string"),
-     *                           @OA\Property(property="preview", type="string"),
-     *                           @OA\Property(property="created_at", type="string", format="date-time"),
-     *                           @OA\Property(property="updated_at", type="string", format="date-time"),
-     *                       )
-     *                  ),
-     *                  @OA\Property(
-     *                      property="next",
-     *                      type="array",
-     *                      @OA\Items(
-     *                            @OA\Property(property="id", type="integer"),
-     *                            @OA\Property(property="uuid", type="string"),
-     *                            @OA\Property(property="name", type="string"),
-     *                            @OA\Property(property="description", type="string"),
-     *                            @OA\Property(property="preview", type="string"),
-     *                            @OA\Property(property="created_at", type="string", format="date-time"),
-     *                            @OA\Property(property="updated_at", type="string", format="date-time"),
-     *                        )
+     *                          @OA\Property(property="id", type="integer"),
+     *                          @OA\Property(property="name", type="string"),
+     *                          @OA\Property(property="preview", type="string"),
+     *                          @OA\Property(property="user_id", type="integer"),
+     *                          @OA\Property(property="comments_count", type="integer"),
+     *                          @OA\Property(property="description", type="string"),
+     *                          @OA\Property(property="created_at", type="string", format="date-time"),
+     *                          @OA\Property(property="updated_at", type="string", format="date-time"),
+     *                      )
      *                  ),
      *                  @OA\Property(
      *                      property="comments",
@@ -259,37 +258,42 @@ class ThemeController
      *                      @OA\Items(
      *                          type="object",
      *                          @OA\Property(property="id", type="integer", description="ID комментария"),
+     *                         @OA\Property(property="theme_id", type="integer"),
+     *                          @OA\Property(
+     *                              property="author",
+     *                              type="object",
+     *                              @OA\Property(property="id", type="integer"),
+     *                              @OA\Property(property="name", type="string")
+     *                          ),
+     *                          @OA\Property(
+     *                              property="answers",
+     *                              type="array",
+     *                              @OA\Items(
+     *                                  type="object",
+     *                                  @OA\Property(property="id", type="integer"),
+     *                                  @OA\Property(property="comment_id", type="integer"),
+     *                                  @OA\Property(
+     *                                      property="author",
+     *                                      type="object",
+     *                                      @OA\Property(property="id", type="integer"),
+     *                                      @OA\Property(property="name", type="string")
+     *                                  ),
+     *                                 @OA\Property(
+     *                                     property="receiver",
+     *                                      type="object",
+     *                                      @OA\Property(property="id", type="integer"),
+     *                                      @OA\Property(property="name", type="string")
+     *                                  ),
+     *                                  @OA\Property(property="content", type="string"),
+     *                                  @OA\Property(property="created_at", type="string", format="date-time"),
+     *                                  @OA\Property(property="updated_at", type="string", format="date-time")
+     *                              )
+     *                          ),
      *                          @OA\Property(property="content", type="string"),
-     *                           @OA\Property(property="status", type="string"),
-     *                           @OA\Property(property="last_updated", type="string", format="date-time"),
-     *                           @OA\Property(property="theme_id", type="integer"),
-     *                           @OA\Property(property="user_id", type="integer"),
      *                          @OA\Property(property="created_at", type="string", format="date-time"),
-     *                           @OA\Property(property="updated_at", type="string"),
-     *                           @OA\Property(property="theme_name", type="string"),
-     *                           @OA\Property(property="user_name", type="string"),
-     *                           @OA\Property(property="user_email", type="string"),
-     *                           @OA\Property(
-     *                               property="answers",
-     *                               type="array",
-     *                               @OA\Items(
-     *                                   type="object",
-     *                                   @OA\Property(property="id", type="integer"),
-     *                                   @OA\Property(property="comment_id", type="integer"),
-     *                                   @OA\Property(property="user_id", type="integer"),
-     *                                   @OA\Property(property="content", type="string"),
-     *                                   @OA\Property(property="receiver_id", type="integer"),
-     *                                  @OA\Property(property="author_name", type="string"),
-     *                                   @OA\Property(property="author_email", type="string"),
-     *                                   @OA\Property(property="author_id", type="integer"),
-     *                                   @OA\Property(property="receiver_name", type="string"),
-     *                                   @OA\Property(property="receiver_email", type="string"),
-     *                                   @OA\Property(property="created_at", type="string", format="date-time"),
-     *                                   @OA\Property(property="updated_at", type="string", format="date-time")
-     *                       )
-     *                    )
-     *                 )
-     *                )
+     *                          @OA\Property(property="updated_at", type="string"),
+     *                      )
+     *                  )
      *              )
      *          )
      *      ),
@@ -341,9 +345,9 @@ class ThemeController
         return [
             'items' => [
                 'topic' => $topic,
-                'latest' => $latestTopics,
-                'next' => $nextTopics,
-                'comments' => $comments,
+                'latest_topics' => LatestTopicResource::collection($latestTopics),
+                'next_topics' => $nextTopics,
+                'comments' => CommentResource::collection($comments),
             ]
         ];
     }

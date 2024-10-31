@@ -4,11 +4,14 @@ namespace App\Policies;
 
 use App\Models\Answer;
 use App\Models\User;
+use App\Traits\AdminPanel;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Log;
 
 class AnswerPolicy
 {
+    use AdminPanel;
+
     /**
      * Determine whether the user can view any models.
      */
@@ -30,6 +33,10 @@ class AnswerPolicy
      */
     public function create(User $user): bool
     {
+        if ($this->isAdminPanel()) {
+            return $user->hasAccess('platform.resource.add');
+        }
+
         return $user->exists;
     }
 
@@ -38,6 +45,10 @@ class AnswerPolicy
      */
     public function update(User $user, Answer $answer): bool
     {
+        if ($this->isAdminPanel()) {
+            return $user->hasAccess('platform.resource.edit');
+        }
+
         Log::info(['user' => $user->id, 'answer' => $answer->user_id]);
         return $user->id == $answer->user_id;
     }
@@ -47,6 +58,10 @@ class AnswerPolicy
      */
     public function delete(User $user, Answer $answer): bool
     {
+        if ($this->isAdminPanel()) {
+            return $user->hasAccess('platform.resource.destroy');
+        }
+
         return $user->id == $answer->user_id;
     }
 }
